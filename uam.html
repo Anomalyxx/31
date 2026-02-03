@@ -3,72 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Please wait... | Akamai Security</title>
+<title>Checking Browser | Akamai</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:sans-serif;background:#f8fafc;color:#1e293b;min-height:100vh;display:flex;flex-direction:column;line-height:1.5}
-.header{background:#fff;padding:18px 0;border-bottom:1px solid #e2e8f0}
-.header-content{max-width:800px;margin:0 auto;padding:0 15px;display:flex;align-items:center;justify-content:space-between}
-.logo{height:32px}
-.header-right{font-size:.8rem;color:#64748b}
-.main-container{flex:1;display:flex;align-items:center;justify-content:center;padding:25px 15px}
-.content-box{max-width:520px;width:100%;background:#fff;padding:30px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.05);border:1px solid #e2e8f0;text-align:center}
-.status-title{font-size:1.5rem;margin-bottom:10px;color:#1e293b}
-.description{font-size:.9rem;color:#64748b;margin-bottom:25px}
-.captcha-wrapper{margin:25px 0;min-height:70px;display:flex;justify-content:center;align-items:center;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0}
-.info-section{background:#f8fafc;border-radius:6px;padding:18px;margin-bottom:25px;border:1px solid #e2e8f0}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.info-item{display:flex;flex-direction:column;gap:4px}
-.info-label{font-size:.7rem;color:#64748b;text-transform:uppercase;font-weight:600}
-.info-value{font-size:.9rem;color:#1e293b;font-family:monospace}
-.security-footer{display:flex;align-items:center;justify-content:center;gap:6px;padding-top:18px;margin-top:10px;border-top:1px solid #e2e8f0}
-.security-text{font-size:.8rem;color:#64748b}
-.security-logo{height:16px;opacity:.9}
-.page-footer{background:#fff;border-top:1px solid #e2e8f0;padding:15px 0;margin-top:auto}
-.footer-content{max-width:800px;margin:0 auto;padding:0 15px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.footer-text,.timestamp{font-size:.7rem;color:#64748b}
-.timestamp{font-family:monospace}
-@media(max-width:480px){.content-box{padding:25px 18px}.info-grid{grid-template-columns:1fr}.status-title{font-size:1.3rem}}
+body{font-family:sans-serif;background:#f5f7fa;color:#333;min-height:100vh;display:flex;flex-direction:column}
+.header{padding:12px 20px;border-bottom:1px solid #ddd;background:#fff}
+.logo{height:24px}
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{background:#fff;padding:25px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid #ddd;max-width:400px;width:100%;text-align:center}
+h1{font-size:1.3rem;margin-bottom:10px}
+p{color:#666;margin-bottom:20px;font-size:.9rem}
+.captcha{margin:20px 0;min-height:60px;background:#f8f9fa;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.info{margin:20px 0;padding:15px;background:#f8f9fa;border-radius:4px}
+.row{display:flex;justify-content:space-between;margin:10px 0}
+.label{font-size:.75rem;color:#777}
+.value{font-family:monospace}
+.footer{padding:12px 20px;border-top:1px solid #ddd;background:#fff;text-align:center;font-size:.7rem;color:#777}
 </style>
 </head>
 <body>
 <div class="header">
-<div class="header-content">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png" alt="Akamai" class="logo">
-<div class="header-right">Cloud Security</div>
 </div>
-</div>
-<div class="main-container">
-<div class="content-box">
-<h1 class="status-title">Checking your browser...</h1>
-<p class="description">This process is automatic. Your browser will redirect to your requested content shortly.</p>
-<div class="captcha-wrapper">::CAPTCHA_BOX::</div>
-<div class="info-section">
-<div class="info-grid">
-<div class="info-item"><span class="info-label">REFERENCE ID</span><span class="info-value" id="referenceId">-</span></div>
-<div class="info-item"><span class="info-label">CLIENT IP</span><span class="info-value" id="clientIp">Detecting...</span></div>
-</div>
-</div>
-<div class="security-footer">
-<span class="security-text">Performance and security by</span>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png" alt="Akamai" class="security-logo">
+<div class="main">
+<div class="box">
+<h1>Checking your browser...</h1>
+<div class="captcha">::CAPTCHA_BOX::</div>
+<div class="info">
+<div class="row"><span class="label">REFERENCE</span><span class="value" id="ref">-</span></div>
+<div class="row"><span class="label">IP</span><span class="value" id="ip">Detecting...</span></div>
 </div>
 </div>
 </div>
-<div class="page-footer">
-<div class="footer-content">
-<div class="footer-text">Akamai Technologies, Inc. All rights reserved.</div>
-<div class="timestamp" id="timestamp">-</div>
-</div>
+<div class="footer">
+<div>Akamai Technologies &copy; <span id="year">2024</span></div>
 </div>
 <script>
-(function(){
-const c='0123456789abcdef',i=[...Array(16)].map(()=>c[Math.random()*16|0]).join('');
-document.getElementById('referenceId').textContent=i;
-const n=new Date,t=n.toISOString().split('T');
-document.getElementById('timestamp').textContent=t[0]+' '+t[1].substr(0,8)+' UTC';
-fetch('https://api.ipify.org?format=json').then(r=>r.ok?r.json():Promise.reject()).then(d=>{document.getElementById('clientIp').textContent=d.ip}).catch(()=>{document.getElementById('clientIp').textContent='188.3.64.'+(Math.random()*255|0)});
-})();
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('ref').textContent=[...Array(12)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
+fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{
+document.getElementById('ip').textContent=d.ip
+}).catch(()=>{
+document.getElementById('ip').textContent='192.168.'+(Math.random()*255|0)+'.'+(Math.random()*255|0)
+});
 </script>
 </body>
 </html>
