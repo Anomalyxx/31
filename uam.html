@@ -1,51 +1,21 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checking Browser | Akamai</title>
+<title>Akamai</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:sans-serif;background:#f5f7fa;color:#333;min-height:100vh;display:flex;flex-direction:column}
-.header{padding:12px 20px;border-bottom:1px solid #ddd;background:#fff}
-.logo{height:24px}
-.main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
-.box{background:#fff;padding:25px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid #ddd;max-width:400px;width:100%;text-align:center}
-h1{font-size:1.3rem;margin-bottom:10px}
-p{color:#666;margin-bottom:20px;font-size:.9rem}
+body{margin:20px;font-family:sans-serif;background:#f5f7fa}
+.frame{max-width:400px;margin:60px auto;padding:25px;background:#fff;border:1px solid #ddd;border-radius:6px;text-align:center}
+.logo{height:24px;margin-bottom:15px}
 .captcha{margin:20px 0;min-height:60px;background:#f8f9fa;border:1px solid #ddd;border-radius:4px;display:flex;align-items:center;justify-content:center}
-.info{margin:20px 0;padding:15px;background:#f8f9fa;border-radius:4px}
-.row{display:flex;justify-content:space-between;margin:10px 0}
-.label{font-size:.75rem;color:#777}
-.value{font-family:monospace}
-.footer{padding:12px 20px;border-top:1px solid #ddd;background:#fff;text-align:center;font-size:.7rem;color:#777}
+.footer{margin-top:20px;font-size:.7rem;color:#666}
 </style>
 </head>
 <body>
-<div class="header">
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png" alt="Akamai" class="logo">
-</div>
-<div class="main">
-<div class="box">
-<h1>Checking your browser...</h1>
+<div class="frame">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png" alt="" class="logo">
+<div>Checking your browser...</div>
 <div class="captcha">::CAPTCHA_BOX::</div>
-<div class="info">
-<div class="row"><span class="label">REFERENCE</span><span class="value" id="ref">-</span></div>
-<div class="row"><span class="label">IP</span><span class="value" id="ip">Detecting...</span></div>
+<div class="footer">Akamai Technologies © 2026</div>
 </div>
-</div>
-</div>
-<div class="footer">
-<div>Akamai Technologies &copy; <span id="year">2024</span></div>
-</div>
-<script>
-document.getElementById('year').textContent=new Date().getFullYear();
-document.getElementById('ref').textContent=[...Array(12)].map(()=>'0123456789abcdef'[Math.random()*16|0]).join('');
-fetch('https://api.ipify.org?format=json').then(r=>r.json()).then(d=>{
-document.getElementById('ip').textContent=d.ip
-}).catch(()=>{
-document.getElementById('ip').textContent='192.168.'+(Math.random()*255|0)+'.'+(Math.random()*255|0)
-});
-</script>
 </body>
 </html>
