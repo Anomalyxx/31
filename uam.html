@@ -1,1 +1,258 @@
-<html><head><title>B</title><style>body{background:#f5f7fa;text-align:center;margin-top:80px;font-family:sans-serif}.t{color:red;font-size:1.5rem}</style></head><body><div class=t>BLOCKED</div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Check</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #020617);
+  color: #f1f5f9;
+  padding: 24px;
+}
+
+.container {
+  text-align: center;
+  max-width: 480px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* AKAMAI LOGO */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.logo-circle {
+  width: 36px;
+  height: 36px;
+  border: 6px solid #38bdf8;
+  border-radius: 50%;
+}
+
+.logo-text {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #38bdf8;
+}
+
+/* SHIELD */
+.shield-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 40px;
+}
+
+.shield-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid transparent;
+  border-top-color: #38bdf8;
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+
+.shield-ring:nth-child(2) {
+  inset: 12px;
+  border-top-color: #60a5fa;
+  animation-duration: 2s;
+  animation-direction: reverse;
+}
+
+.shield-ring:nth-child(3) {
+  inset: 24px;
+  border-top-color: #93c5fd;
+  animation-duration: 2.6s;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.shield-icon {
+  position: absolute;
+  inset: 38px;
+  background: linear-gradient(135deg, #38bdf8, #2563eb);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.5);
+}
+
+.shield-icon svg {
+  width: 40px;
+  height: 40px;
+  color: #ffffff;
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  font-size: 1.05rem;
+  color: #94a3b8;
+  margin-bottom: 36px;
+}
+
+/* STATUS CARD */
+.status-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(10px);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  background: #38bdf8;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(.8); }
+}
+
+.status-text {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.progress-container {
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  height: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress-bar {
+  height: 100%;
+  width: 60%;
+  background: linear-gradient(90deg, #38bdf8, #60a5fa, #38bdf8);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+/* FOOTER */
+.footer-text {
+  font-size: .85rem;
+  color: #64748b;
+}
+
+.footer-text a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+.ray-id {
+  margin-top: 22px;
+  font-size: .75rem;
+  color: #475569;
+  font-family: monospace;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+  <!-- AKAMAI LOGO -->
+  <div class="logo">
+    <div class="logo-circle"></div>
+    <div class="logo-text">AKAMAI</div>
+  </div>
+
+  <!-- SHIELD -->
+  <div class="shield-container">
+    <div class="shield-ring"></div>
+    <div class="shield-ring"></div>
+    <div class="shield-ring"></div>
+    <div class="shield-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+      </svg>
+    </div>
+  </div>
+
+  <h1 class="title">Checking your browser</h1>
+  <p class="subtitle">This process is automatic. You’ll be redirected shortly.</p>
+
+  <div class="status-card">
+    <div class="status-header">
+      <div class="status-dot"></div>
+      <span class="status-text">Security verification in progress</span>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+
+    ::CAPTCHA_BOX::
+  </div>
+
+  <p class="footer-text">
+    This check helps protect the website from malicious traffic.<br>
+    Need help? <a href="mailto:tech@supplycart.my">Contact support</a>
+  </p>
+
+  <p class="ray-id">
+    Ray ID: <span id="ray-id">—</span>
+  </p>
+
+</div>
+
+<script>
+document.getElementById('ray-id').textContent =
+  Math.random().toString(36).substring(2, 18);
+</script>
+</body>
+</html>
