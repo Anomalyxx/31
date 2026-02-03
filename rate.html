@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>429 Too Many Requests</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #f4f6f8;
+        color: #1a1a1a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .container {
+        max-width: 560px;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        padding: 45px;
+        text-align: center;
+    }
+
+    .logo img {
+        max-width: 180px;
+        margin-bottom: 25px;
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 16px;
+        color: #111;
+    }
+
+    p {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #555;
+        margin-bottom: 26px;
+    }
+
+    .code {
+        font-size: 13px;
+        color: #666;
+        background: #f1f3f5;
+        padding: 12px;
+        border-radius: 5px;
+        margin-bottom: 28px;
+    }
+
+    .divider {
+        height: 1px;
+        background: #e6e6e6;
+        margin: 25px 0;
+    }
+
+    .footer {
+        font-size: 12px;
+        color: #999;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/1280px-Akamai_logo.svg.png" alt="Akamai Logo">
+        </div>
+
+        <h1>Too Many Requests</h1>
+
+        <p>
+            Your request rate has exceeded the allowed limit.
+            To protect our infrastructure and ensure service stability,
+            access to this resource has been temporarily restricted.
+        </p>
+
+        <div class="code">
+            Error 429 — Rate Limit Exceeded
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="footer">
+            Powered by Akamai Intelligent Edge
+        </div>
+    </div>
+</body>
+</html>
