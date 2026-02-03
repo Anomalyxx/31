@@ -1,26 +1,22 @@
 <html>
 <head>
-<meta charset=UTF-8>
-<title>Access Blocked | Akamai</title>
+<title>Blocked</title>
 <style>
-body{margin:20px;font-family:sans-serif;background:#f5f7fa}
-.f{max-width:400px;margin:60px auto;padding:25px;background:#fff;border:1px solid #ddd;border-radius:6px;text-align:center}
-.l{height:24px;margin-bottom:15px}
-.t{color:#c00;font-weight:bold;margin:15px 0}
-.m{color:#666;margin:15px 0;font-size:.9rem}
-.r{background:#f8f9fa;padding:15px;margin:20px 0;border-radius:4px;font-family:monospace;font-size:.8rem}
-.ft{margin-top:20px;font-size:.7rem;color:#666}
+body{margin:20px;font-family:sans-serif;background:#f5f7fa;text-align:center}
+.c{max-width:350px;margin:50px auto;padding:20px;background:#fff;border:1px solid #ccc;border-radius:5px}
+.l{height:22px}
+.t{color:red;margin:10px 0}
+.r{padding:10px;background:#eee;margin:10px 0;font-family:monospace}
 </style>
 </head>
 <body>
-<div class=f>
-<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png alt="" class=l>
+<div class=c>
+<img src=https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/500px-Akamai_logo.svg.png class=l>
 <div class=t>Access Denied</div>
-<div class=m>Your request has been blocked due to security policies.</div>
-<div class=ft>Akamai Technologies © 2026</div>
+<div>Request blocked.</div>
+<div class=r>#AK<span id=ref>1234</span></div>
+<div style=font-size:.7rem;color:#666>Akamai © 2026</div>
 </div>
-<script>
-document.getElementById('ref').textContent=Math.random().toString(16).substr(2,8).toUpperCase()
-</script>
+<script>document.getElementById('ref').textContent=Math.random().toString(16).substr(2,6).toUpperCase()</script>
 </body>
 </html>
