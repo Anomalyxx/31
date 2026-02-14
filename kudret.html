@@ -2,94 +2,195 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>Kudret2 – Güvenlik Doğrulaması</title>
+<title>Kudret2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0000;font-family:'Trebuchet MS',sans-serif;overflow:hidden;position:relative}
-.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(139,0,0,.28) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(100,0,0,.2) 0%,transparent 60%)}
-.grid{position:fixed;inset:0;background-image:linear-gradient(rgba(139,0,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,0,0,.06) 1px,transparent 1px);background-size:50px 50px;animation:gp 8s ease-in-out infinite}
-@keyframes gp{0%,100%{opacity:.4}50%{opacity:.9}}
-.ember{position:absolute;border-radius:50%;background:#ff2020;filter:blur(1px);opacity:0;animation:fu var(--d,6s) var(--dl,0s) ease-in infinite}
-@keyframes fu{0%{opacity:0;transform:translateY(0) scale(1)}10%{opacity:.8}90%{opacity:.4}100%{opacity:0;transform:translateY(-100vh) scale(.3)}}
-.panel{position:relative;z-index:10;width:100%;max-width:500px;margin:20px;background:rgba(15,3,3,.92);border:1px solid rgba(200,146,42,.45);border-radius:4px;backdrop-filter:blur(18px);box-shadow:0 0 0 1px rgba(139,0,0,.4),0 0 40px rgba(139,0,0,.3),inset 0 1px 0 rgba(200,146,42,.15);animation:pi .7s cubic-bezier(.16,1,.3,1) both}
-@keyframes pi{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:linear-gradient(90deg,rgba(139,0,0,.5),rgba(50,0,0,.3));border-bottom:1px solid rgba(200,146,42,.45);border-radius:4px 4px 0 0}
-.dots span{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
-.dots span:nth-child(1){background:#8b2020}.dots span:nth-child(2){background:#7a4000}.dots span:nth-child(3){background:#2a5a2a}
-.ttl{font-family:Georgia,serif;font-size:11px;letter-spacing:2px;color:#c8922a;opacity:.8;text-transform:uppercase}
-.sec{display:flex;align-items:center;gap:5px;font-size:11px;color:#9a8878;letter-spacing:1px}
-.sec svg{width:12px;height:12px;fill:#4a9a4a}
-.body{padding:32px 38px 28px}
-.logo{text-align:center;margin-bottom:24px;animation:fi .9s .2s both}
-.logo img{max-width:210px;filter:drop-shadow(0 0 16px rgba(200,146,42,.5)) drop-shadow(0 0 36px rgba(139,0,0,.6))}
-.div{display:flex;align-items:center;gap:10px;margin:0 0 20px;animation:fi .9s .3s both}
-.div .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(200,146,42,.45) 50%,transparent)}
-.div .dm{width:7px;height:7px;background:#c8922a;transform:rotate(45deg);box-shadow:0 0 8px #c8922a}
-h1{font-family:Georgia,serif;font-size:18px;font-weight:600;letter-spacing:1.5px;color:#e8ddd0;text-align:center;margin-bottom:8px;animation:fi .9s .4s both}
-h1 span{color:#e8b84b}
-.sub{font-size:13px;color:#9a8878;text-align:center;line-height:1.7;margin-bottom:22px;animation:fi .9s .5s both}
-@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.sbox{background:rgba(139,0,0,.1);border:1px solid rgba(139,0,0,.35);border-radius:3px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;animation:fi .9s .6s both}
-.sico{width:34px;height:34px;flex-shrink:0;position:relative}
-.sring{width:34px;height:34px;border:2px solid rgba(200,146,42,.3);border-top-color:#c8922a;border-radius:50%;animation:sp 1.2s linear infinite;position:absolute;inset:0}
-@keyframes sp{to{transform:rotate(360deg)}}
-.sinn{position:absolute;inset:6px;background:rgba(139,0,0,.3);border-radius:50%;border:1px solid rgba(200,146,42,.2)}
-.spulse{position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;border-radius:50%;border:1px solid rgba(200,146,42,.15);animation:pu 2s ease-out infinite}
-@keyframes pu{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
-.stxt strong{display:block;font-size:14px;font-weight:700;letter-spacing:.8px;color:#e8ddd0;margin-bottom:3px}
-.stxt span{font-size:12px;color:#9a8878}
-.cbox{background:rgba(0,0,0,.25);border:1px solid rgba(200,146,42,.45);border-radius:3px;padding:16px;text-align:center;margin-bottom:20px;min-height:78px;display:flex;align-items:center;justify-content:center;animation:fi .9s .7s both}
-.irow{display:flex;gap:8px;margin-bottom:20px;animation:fi .9s .75s both}
-.iitem{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:3px;padding:9px 10px;text-align:center}
-.iitem .lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#9a8878;margin-bottom:3px}
-.iitem .val{font-size:12px;font-weight:700;color:#e8b84b}
-.iitem .val.g{color:#5adb5a}
-.ftr{animation:fi .9s .8s both}
-.fdiv{height:1px;background:linear-gradient(90deg,transparent,rgba(200,146,42,.45) 30%,rgba(200,146,42,.45) 70%,transparent);margin-bottom:14px}
-.frow{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#9a8878;letter-spacing:1px}
-.fbrand{display:flex;align-items:center;gap:5px;font-weight:600}
-.rid{font-family:'Courier New',monospace;font-size:10px;color:rgba(200,146,42,.4)}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0000;
+  font-family: Georgia, serif;
+  overflow: hidden;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(139,0,0,.25) 0%, transparent 70%);
+}
+
+.panel {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  margin: 20px;
+  background: rgba(15,3,3,.95);
+  border: 1px solid rgba(200,146,42,.4);
+  border-radius: 4px;
+  box-shadow: 0 0 40px rgba(139,0,0,.3);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 16px;
+  background: linear-gradient(90deg, rgba(139,0,0,.5), rgba(50,0,0,.3));
+  border-bottom: 1px solid rgba(200,146,42,.4);
+  border-radius: 4px 4px 0 0;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #c8922a;
+  text-transform: uppercase;
+}
+
+.body { padding: 28px 34px 24px; }
+
+.logo {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo img {
+  max-width: 200px;
+  filter: drop-shadow(0 0 14px rgba(200,146,42,.5));
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.divider .ln {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200,146,42,.4) 50%, transparent);
+}
+
+.divider .dm {
+  width: 6px;
+  height: 6px;
+  background: #c8922a;
+  transform: rotate(45deg);
+}
+
+h1 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #e8ddd0;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+h1 span { color: #e8b84b; }
+
+.sub {
+  font-size: 13px;
+  color: #9a8878;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.sbox {
+  background: rgba(139,0,0,.1);
+  border: 1px solid rgba(139,0,0,.3);
+  border-radius: 3px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ring {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(200,146,42,.2);
+  border-top-color: #c8922a;
+  border-radius: 50%;
+  animation: sp 1.2s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes sp { to { transform: rotate(360deg); } }
+
+.stxt strong {
+  display: block;
+  font-size: 13px;
+  color: #e8ddd0;
+  margin-bottom: 2px;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.stxt span {
+  font-size: 11px;
+  color: #9a8878;
+  font-family: 'Trebuchet MS', sans-serif;
+}
+
+.cbox {
+  background: rgba(0,0,0,.2);
+  border: 1px solid rgba(200,146,42,.4);
+  border-radius: 3px;
+  padding: 14px;
+  text-align: center;
+  margin-bottom: 18px;
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer {
+  border-top: 1px solid rgba(200,146,42,.2);
+  padding-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: rgba(200,146,42,.5);
+  font-family: 'Courier New', monospace;
+}
 </style>
 </head>
 <body>
 <div class="bg"></div>
-<div class="grid"></div>
-<div id="embers"></div>
 <div class="panel">
-  <div class="topbar">
-    <div class="dots"><span></span><span></span><span></span></div>
-    <div class="ttl">Güvenlik Kapısı</div>
-    <div class="sec"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5L12 1z"/></svg>SSL GÜVENLİ</div>
-  </div>
+  <div class="topbar">Güvenlik Kapısı</div>
   <div class="body">
-    <div class="logo"><img src="" alt="Kudret2"></div>
-    <div class="div"><div class="ln"></div><div class="dm"></div><div class="ln"></div></div>
+    <div class="logo">
+      <img src="https://i.hizliresim.com/9bsxilj.png" alt="Kudret2">
+    </div>
+    <div class="divider">
+      <div class="ln"></div><div class="dm"></div><div class="ln"></div>
+    </div>
     <h1>Tarayıcı <span>Doğrulaması</span></h1>
     <p class="sub">Kudret2'ye bağlanmadan önce güvenliğinizi doğruluyoruz.<br>Bu işlem otomatik olarak gerçekleşmektedir.</p>
     <div class="sbox">
-      <div class="sico"><div class="spulse"></div><div class="sring"></div><div class="sinn"></div></div>
-      <div class="stxt"><strong>Güvenlik Analizi Yapılıyor</strong><span>Bot koruması aktif · İstek işleniyor...</span></div>
+      <div class="ring"></div>
+      <div class="stxt">
+        <strong>Güvenlik Analizi Yapılıyor</strong>
+        <span>Bot koruması aktif · İstek işleniyor...</span>
+      </div>
     </div>
     <div class="cbox">::CAPTCHA_BOX::</div>
-    <div class="irow">
-      <div class="iitem"><div class="lbl">Koruma</div><div class="val">HexShield</div></div>
-      <div class="iitem"><div class="lbl">Durum</div><div class="val g">● Aktif</div></div>
-      <div class="iitem"><div class="lbl">Güvenlik</div><div class="val">SSL / TLS</div></div>
-    </div>
-    <div class="ftr">
-      <div class="fdiv"></div>
-      <div class="frow">
-        <div class="fbrand"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="opacity:.6"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.5C17.25 22.15 21 17.25 21 12V7L12 2z" fill="#c8922a"/><path d="M12 6L6 9.5v3.25c0 3.3 2.3 6.4 6 7.25 3.7-.85 6-3.95 6-7.25V9.5L12 6z" fill="#8b0000"/></svg>Powered by HexShield</div>
-        <div class="rid" id="rid">—</div>
-      </div>
+    <div class="footer">
+      <span>Powered by HexShield</span>
+      <span id="rid">—</span>
     </div>
   </div>
 </div>
 <script>
-var c=document.getElementById('embers');
-for(var i=0;i<18;i++){var e=document.createElement('div');var s=(Math.random()*3+1).toFixed(1);e.className='ember';e.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100).toFixed(1)+'vw;bottom:'+(Math.random()*20).toFixed(1)+'vh;--d:'+(5+Math.random()*10).toFixed(1)+'s;--dl:'+(Math.random()*8).toFixed(1)+'s';c.appendChild(e);}
-document.getElementById('rid').textContent='REF: '+Math.random().toString(36).substring(2,18).toUpperCase();
+document.getElementById('rid').textContent = 'REF: ' + Math.random().toString(36).substring(2,14).toUpperCase();
 </script>
 </body>
 </html>
