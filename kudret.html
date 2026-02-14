@@ -4,553 +4,92 @@
 <meta charset="UTF-8">
 <title>Kudret2 – Güvenlik Doğrulaması</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
 <style>
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0; padding: 0;
-  }
-
-  :root {
-    --red-deep:     #8b0000;
-    --red-primary:  #cc0000;
-    --red-glow:     #ff2020;
-    --red-soft:     #ff4444;
-    --gold:         #c8922a;
-    --gold-light:   #e8b84b;
-    --gold-shine:   #f5d47a;
-    --dark-1:       #0a0000;
-    --dark-2:       #120000;
-    --dark-3:       #1a0000;
-    --dark-4:       #230000;
-    --panel-bg:     rgba(15, 3, 3, 0.92);
-    --border-gold:  rgba(200, 146, 42, 0.45);
-    --text-light:   #e8ddd0;
-    --text-muted:   #9a8878;
-  }
-
-  body {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--dark-1);
-    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* ── Animated Background ── */
-  .bg-layer {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-  }
-
-  .bg-radial {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 60% at 50% 50%, rgba(139,0,0,0.28) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(100,0,0,0.2) 0%, transparent 60%),
-      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(120,0,0,0.18) 0%, transparent 60%);
-  }
-
-  .bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(139,0,0,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(139,0,0,0.06) 1px, transparent 1px);
-    background-size: 50px 50px;
-    animation: gridPulse 8s ease-in-out infinite;
-  }
-
-  @keyframes gridPulse {
-    0%, 100% { opacity: 0.4; }
-    50%       { opacity: 0.9; }
-  }
-
-  /* Floating embers */
-  .ember {
-    position: absolute;
-    border-radius: 50%;
-    background: var(--red-glow);
-    filter: blur(1px);
-    opacity: 0;
-    animation: floatUp var(--dur, 6s) var(--delay, 0s) ease-in infinite;
-  }
-
-  @keyframes floatUp {
-    0%   { opacity: 0; transform: translateY(0) scale(1); }
-    10%  { opacity: 0.8; }
-    90%  { opacity: 0.4; }
-    100% { opacity: 0; transform: translateY(-100vh) scale(0.3); }
-  }
-
-
-
-  /* ── Main Panel ── */
-  .panel {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 520px;
-    margin: 20px;
-    background: var(--panel-bg);
-    border: 1px solid var(--border-gold);
-    border-radius: 4px;
-    padding: 0;
-    backdrop-filter: blur(18px);
-    box-shadow:
-      0 0 0 1px rgba(139,0,0,0.4),
-      0 0 40px rgba(139,0,0,0.3),
-      0 0 80px rgba(139,0,0,0.15),
-      inset 0 1px 0 rgba(200,146,42,0.15);
-    animation: panelIn 0.7s cubic-bezier(0.16,1,0.3,1) both;
-  }
-
-  @keyframes panelIn {
-    from { opacity: 0; transform: translateY(24px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* Top bar */
-  .panel-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 18px;
-    background: linear-gradient(90deg, rgba(139,0,0,0.5) 0%, rgba(50,0,0,0.3) 100%);
-    border-bottom: 1px solid var(--border-gold);
-    border-radius: 4px 4px 0 0;
-  }
-
-  .topbar-dots span {
-    display: inline-block;
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    margin-right: 5px;
-  }
-  .topbar-dots span:nth-child(1) { background: #8b2020; }
-  .topbar-dots span:nth-child(2) { background: #7a4000; }
-  .topbar-dots span:nth-child(3) { background: #2a5a2a; }
-
-  .topbar-title {
-    font-family: 'Georgia', serif;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    opacity: 0.8;
-    text-transform: uppercase;
-  }
-
-  .topbar-secure {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-  }
-  .topbar-secure svg { width: 12px; height: 12px; fill: #4a9a4a; }
-
-  /* Panel body */
-  .panel-body {
-    padding: 36px 42px 32px;
-  }
-
-  /* Logo */
-  .logo-wrap {
-    text-align: center;
-    margin-bottom: 28px;
-    animation: logoReveal 0.9s 0.2s cubic-bezier(0.16,1,0.3,1) both;
-  }
-
-  @keyframes logoReveal {
-    from { opacity: 0; transform: translateY(-10px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .logo-wrap img {
-    max-width: 220px;
-    height: auto;
-    filter: drop-shadow(0 0 18px rgba(200,146,42,0.5)) drop-shadow(0 0 40px rgba(139,0,0,0.6));
-  }
-
-  /* Divider ornament */
-  .ornament-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 0 24px;
-    animation: fadeIn 0.9s 0.35s both;
-  }
-  .ornament-divider .line {
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-gold) 50%, transparent);
-  }
-  .ornament-divider .diamond {
-    width: 7px; height: 7px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    box-shadow: 0 0 8px var(--gold);
-  }
-
-  /* Heading */
-  .panel-title {
-    font-family: 'Georgia', serif;
-    font-size: 19px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    color: var(--text-light);
-    text-align: center;
-    margin-bottom: 10px;
-    animation: fadeIn 0.9s 0.4s both;
-  }
-  .panel-title span { color: var(--gold-light); }
-
-  .panel-sub {
-    font-size: 14px;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.7;
-    margin-bottom: 26px;
-    letter-spacing: 0.3px;
-    animation: fadeIn 0.9s 0.5s both;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* Status box */
-  .status-box {
-    background: rgba(139,0,0,0.1);
-    border: 1px solid rgba(139,0,0,0.35);
-    border-radius: 3px;
-    padding: 14px 18px;
-    margin-bottom: 22px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    animation: fadeIn 0.9s 0.6s both;
-  }
-
-  .status-icon {
-    width: 36px; height: 36px;
-    flex-shrink: 0;
-    position: relative;
-  }
-
-  .status-ring {
-    width: 36px; height: 36px;
-    border: 2px solid rgba(200,146,42,0.3);
-    border-top-color: var(--gold);
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-    position: absolute;
-    inset: 0;
-  }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-
-  .status-inner {
-    position: absolute;
-    inset: 6px;
-    background: rgba(139,0,0,0.3);
-    border-radius: 50%;
-    border: 1px solid rgba(200,146,42,0.2);
-  }
-
-  .status-text { flex: 1; }
-  .status-text strong {
-    display: block;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    color: var(--text-light);
-    margin-bottom: 3px;
-  }
-  .status-text span {
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-  }
-
-
-
-  /* CAPTCHA area */
-  .captcha-area {
-    background: rgba(0,0,0,0.25);
-    border: 1px solid var(--border-gold);
-    border-radius: 3px;
-    padding: 18px;
-    text-align: center;
-    margin-bottom: 22px;
-    min-height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    animation: fadeIn 0.9s 0.7s both;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .captcha-area::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(139,0,0,0.05) 0%, transparent 50%, rgba(200,146,42,0.04) 100%);
-  }
-
-  .captcha-inner {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ::CAPTCHA_BOX:: stays here as a comment replacement point */
-  /* Replace .captcha-placeholder with your real UAM/CAPTCHA widget */
-  .captcha-placeholder {
-    color: var(--text-muted);
-    font-size: 13px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* Info row */
-  .info-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 24px;
-    animation: fadeIn 0.9s 0.75s both;
-  }
-  .info-item {
-    flex: 1;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 3px;
-    padding: 10px 12px;
-    text-align: center;
-  }
-  .info-item .label {
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-  .info-item .value {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--gold-light);
-    letter-spacing: 0.5px;
-  }
-  .info-item .value.green { color: #5adb5a; }
-
-  /* Bottom ornament */
-  .bottom-ornament {
-    animation: fadeIn 0.9s 0.8s both;
-  }
-
-  .divider-line {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border-gold) 30%, var(--border-gold) 70%, transparent);
-    margin-bottom: 18px;
-  }
-
-  .footer-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-  }
-
-  .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
-    color: var(--text-muted);
-  }
-  .footer-brand img {
-    height: 16px;
-    opacity: 0.45;
-    filter: grayscale(1);
-  }
-
-  .ray-id-val {
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
-    color: rgba(200,146,42,0.4);
-    letter-spacing: 0.5px;
-  }
-
-  /* Shield icon pulse */
-  .shield-pulse {
-    position: absolute;
-    top: -3px; left: -3px; right: -3px; bottom: -3px;
-    border-radius: 50%;
-    border: 1px solid rgba(200,146,42,0.15);
-    animation: pulsate 2s ease-out infinite;
-  }
-  @keyframes pulsate {
-    0%   { transform: scale(1);   opacity: 0.6; }
-    100% { transform: scale(1.5); opacity: 0; }
-  }
-
-  /* Scan line effect on panel */
-  .panel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0,0,0,0.03) 2px,
-      rgba(0,0,0,0.03) 4px
-    );
-    pointer-events: none;
-    border-radius: 4px;
-  }
-
+*{box-sizing:border-box;margin:0;padding:0}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0a0000;font-family:'Trebuchet MS',sans-serif;overflow:hidden;position:relative}
+.bg{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(139,0,0,.28) 0%,transparent 70%),radial-gradient(ellipse 40% 40% at 20% 80%,rgba(100,0,0,.2) 0%,transparent 60%)}
+.grid{position:fixed;inset:0;background-image:linear-gradient(rgba(139,0,0,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,0,0,.06) 1px,transparent 1px);background-size:50px 50px;animation:gp 8s ease-in-out infinite}
+@keyframes gp{0%,100%{opacity:.4}50%{opacity:.9}}
+.ember{position:absolute;border-radius:50%;background:#ff2020;filter:blur(1px);opacity:0;animation:fu var(--d,6s) var(--dl,0s) ease-in infinite}
+@keyframes fu{0%{opacity:0;transform:translateY(0) scale(1)}10%{opacity:.8}90%{opacity:.4}100%{opacity:0;transform:translateY(-100vh) scale(.3)}}
+.panel{position:relative;z-index:10;width:100%;max-width:500px;margin:20px;background:rgba(15,3,3,.92);border:1px solid rgba(200,146,42,.45);border-radius:4px;backdrop-filter:blur(18px);box-shadow:0 0 0 1px rgba(139,0,0,.4),0 0 40px rgba(139,0,0,.3),inset 0 1px 0 rgba(200,146,42,.15);animation:pi .7s cubic-bezier(.16,1,.3,1) both}
+@keyframes pi{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;background:linear-gradient(90deg,rgba(139,0,0,.5),rgba(50,0,0,.3));border-bottom:1px solid rgba(200,146,42,.45);border-radius:4px 4px 0 0}
+.dots span{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
+.dots span:nth-child(1){background:#8b2020}.dots span:nth-child(2){background:#7a4000}.dots span:nth-child(3){background:#2a5a2a}
+.ttl{font-family:Georgia,serif;font-size:11px;letter-spacing:2px;color:#c8922a;opacity:.8;text-transform:uppercase}
+.sec{display:flex;align-items:center;gap:5px;font-size:11px;color:#9a8878;letter-spacing:1px}
+.sec svg{width:12px;height:12px;fill:#4a9a4a}
+.body{padding:32px 38px 28px}
+.logo{text-align:center;margin-bottom:24px;animation:fi .9s .2s both}
+.logo img{max-width:210px;filter:drop-shadow(0 0 16px rgba(200,146,42,.5)) drop-shadow(0 0 36px rgba(139,0,0,.6))}
+.div{display:flex;align-items:center;gap:10px;margin:0 0 20px;animation:fi .9s .3s both}
+.div .ln{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(200,146,42,.45) 50%,transparent)}
+.div .dm{width:7px;height:7px;background:#c8922a;transform:rotate(45deg);box-shadow:0 0 8px #c8922a}
+h1{font-family:Georgia,serif;font-size:18px;font-weight:600;letter-spacing:1.5px;color:#e8ddd0;text-align:center;margin-bottom:8px;animation:fi .9s .4s both}
+h1 span{color:#e8b84b}
+.sub{font-size:13px;color:#9a8878;text-align:center;line-height:1.7;margin-bottom:22px;animation:fi .9s .5s both}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.sbox{background:rgba(139,0,0,.1);border:1px solid rgba(139,0,0,.35);border-radius:3px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;animation:fi .9s .6s both}
+.sico{width:34px;height:34px;flex-shrink:0;position:relative}
+.sring{width:34px;height:34px;border:2px solid rgba(200,146,42,.3);border-top-color:#c8922a;border-radius:50%;animation:sp 1.2s linear infinite;position:absolute;inset:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sinn{position:absolute;inset:6px;background:rgba(139,0,0,.3);border-radius:50%;border:1px solid rgba(200,146,42,.2)}
+.spulse{position:absolute;top:-3px;left:-3px;right:-3px;bottom:-3px;border-radius:50%;border:1px solid rgba(200,146,42,.15);animation:pu 2s ease-out infinite}
+@keyframes pu{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+.stxt strong{display:block;font-size:14px;font-weight:700;letter-spacing:.8px;color:#e8ddd0;margin-bottom:3px}
+.stxt span{font-size:12px;color:#9a8878}
+.cbox{background:rgba(0,0,0,.25);border:1px solid rgba(200,146,42,.45);border-radius:3px;padding:16px;text-align:center;margin-bottom:20px;min-height:78px;display:flex;align-items:center;justify-content:center;animation:fi .9s .7s both}
+.irow{display:flex;gap:8px;margin-bottom:20px;animation:fi .9s .75s both}
+.iitem{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:3px;padding:9px 10px;text-align:center}
+.iitem .lbl{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#9a8878;margin-bottom:3px}
+.iitem .val{font-size:12px;font-weight:700;color:#e8b84b}
+.iitem .val.g{color:#5adb5a}
+.ftr{animation:fi .9s .8s both}
+.fdiv{height:1px;background:linear-gradient(90deg,transparent,rgba(200,146,42,.45) 30%,rgba(200,146,42,.45) 70%,transparent);margin-bottom:14px}
+.frow{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#9a8878;letter-spacing:1px}
+.fbrand{display:flex;align-items:center;gap:5px;font-weight:600}
+.rid{font-family:'Courier New',monospace;font-size:10px;color:rgba(200,146,42,.4)}
 </style>
 </head>
 <body>
-
-<!-- Background -->
-<div class="bg-layer">
-  <div class="bg-radial"></div>
-  <div class="bg-grid"></div>
-</div>
-
-<!-- Floating embers (JS generated) -->
+<div class="bg"></div>
+<div class="grid"></div>
 <div id="embers"></div>
-
-
-
-
-<!-- Main Panel -->
 <div class="panel">
-
-  <!-- Top bar -->
-  <div class="panel-topbar">
-    <div class="topbar-dots">
-      <span></span><span></span><span></span>
-    </div>
-    <div class="topbar-title">Güvenlik Kapısı</div>
-    <div class="topbar-secure">
-      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5L12 1z"/></svg>
-      SSL GÜVENLİ
-    </div>
+  <div class="topbar">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <div class="ttl">Güvenlik Kapısı</div>
+    <div class="sec"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5L12 1z"/></svg>SSL GÜVENLİ</div>
   </div>
-
-  <!-- Body -->
-  <div class="panel-body">
-
-    <!-- Logo -->
-    <div class="logo-wrap">
-      <img src="https://i.hizliresim.com/9bsxilj.png" alt="Kudret2 Logo">
+  <div class="body">
+    <div class="logo"><img src="https://i.hizliresim.com/9bsxilj.png" alt="Kudret2"></div>
+    <div class="div"><div class="ln"></div><div class="dm"></div><div class="ln"></div></div>
+    <h1>Tarayıcı <span>Doğrulaması</span></h1>
+    <p class="sub">Kudret2'ye bağlanmadan önce güvenliğinizi doğruluyoruz.<br>Bu işlem otomatik olarak gerçekleşmektedir.</p>
+    <div class="sbox">
+      <div class="sico"><div class="spulse"></div><div class="sring"></div><div class="sinn"></div></div>
+      <div class="stxt"><strong>Güvenlik Analizi Yapılıyor</strong><span>Bot koruması aktif · İstek işleniyor...</span></div>
     </div>
-
-    <!-- Ornament -->
-    <div class="ornament-divider">
-      <div class="line"></div>
-      <div class="diamond"></div>
-      <div class="line"></div>
+    <div class="cbox">::CAPTCHA_BOX::</div>
+    <div class="irow">
+      <div class="iitem"><div class="lbl">Koruma</div><div class="val">HexShield</div></div>
+      <div class="iitem"><div class="lbl">Durum</div><div class="val g">● Aktif</div></div>
+      <div class="iitem"><div class="lbl">Güvenlik</div><div class="val">SSL / TLS</div></div>
     </div>
-
-    <!-- Title -->
-    <h1 class="panel-title">Tarayıcı <span>Doğrulaması</span></h1>
-    <p class="panel-sub">
-      Kudret2'ye bağlanmadan önce güvenliğinizi doğruluyoruz.<br>
-      Bu işlem otomatik olarak gerçekleşmektedir.
-    </p>
-
-    <!-- Status -->
-    <div class="status-box">
-      <div class="status-icon">
-        <div class="shield-pulse"></div>
-        <div class="status-ring"></div>
-        <div class="status-inner"></div>
-      </div>
-      <div class="status-text">
-        <strong>Güvenlik Analizi Yapılıyor</strong>
-        <span>Bot koruması aktif · İstek işleniyor...</span>
+    <div class="ftr">
+      <div class="fdiv"></div>
+      <div class="frow">
+        <div class="fbrand"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="opacity:.6"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.5C17.25 22.15 21 17.25 21 12V7L12 2z" fill="#c8922a"/><path d="M12 6L6 9.5v3.25c0 3.3 2.3 6.4 6 7.25 3.7-.85 6-3.95 6-7.25V9.5L12 6z" fill="#8b0000"/></svg>Powered by HexShield</div>
+        <div class="rid" id="rid">—</div>
       </div>
     </div>
-
-
-
-    <!-- CAPTCHA Box -->
-    <div class="captcha-area">
-      <div class="captcha-inner">
-        ::CAPTCHA_BOX::
-      </div>
-    </div>
-
-    <!-- Info row -->
-    <div class="info-row">
-      <div class="info-item">
-        <div class="label">Koruma</div>
-        <div class="value">HexShield</div>
-      </div>
-      <div class="info-item">
-        <div class="label">Durum</div>
-        <div class="value green">● Aktif</div>
-      </div>
-      <div class="info-item">
-        <div class="label">Güvenlik</div>
-        <div class="value">SSL / TLS</div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="bottom-ornament">
-      <div class="divider-line"></div>
-      <div class="footer-row">
-        <div class="footer-brand">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="opacity:0.6"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.5C17.25 22.15 21 17.25 21 12V7L12 2z" fill="#c8922a"/><path d="M12 6L6 9.5v3.25c0 3.3 2.3 6.4 6 7.25 3.7-.85 6-3.95 6-7.25V9.5L12 6z" fill="#8b0000"/></svg>
-          Powered by HexShield
-        </div>
-        <div class="ray-id-val" id="ray-id">—</div>
-      </div>
-    </div>
-
   </div>
 </div>
-
 <script>
-  /* ── Ember particles ── */
-  const container = document.getElementById('embers');
-  for (let i = 0; i < 28; i++) {
-    const e = document.createElement('div');
-    e.className = 'ember';
-    const size = Math.random() * 3 + 1;
-    e.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}vw;
-      bottom:${Math.random()*20}vh;
-      --dur:${5 + Math.random()*10}s;
-      --delay:${Math.random()*8}s;
-    `;
-    container.appendChild(e);
-  }
-
-  /* ── Ray ID ── */
-  document.getElementById('ray-id').textContent =
-    'REF: ' + Math.random().toString(36).substring(2, 18).toUpperCase();
-
-
+var c=document.getElementById('embers');
+for(var i=0;i<18;i++){var e=document.createElement('div');var s=(Math.random()*3+1).toFixed(1);e.className='ember';e.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100).toFixed(1)+'vw;bottom:'+(Math.random()*20).toFixed(1)+'vh;--d:'+(5+Math.random()*10).toFixed(1)+'s;--dl:'+(Math.random()*8).toFixed(1)+'s';c.appendChild(e);}
+document.getElementById('rid').textContent='REF: '+Math.random().toString(36).substring(2,18).toUpperCase();
 </script>
-
 </body>
 </html>
