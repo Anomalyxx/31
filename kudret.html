@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Kudret2 – Güvenlik Doğrulaması</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 
 <style>
   *, *::before, *::after {
@@ -36,7 +36,7 @@
     align-items: center;
     justify-content: center;
     background-color: var(--dark-1);
-    font-family: 'Rajdhani', sans-serif;
+    font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
     overflow: hidden;
     position: relative;
   }
@@ -89,18 +89,7 @@
     100% { opacity: 0; transform: translateY(-100vh) scale(0.3); }
   }
 
-  /* Corner ornaments */
-  .corner {
-    position: fixed;
-    width: 120px; height: 120px;
-    opacity: 0.25;
-    z-index: 1;
-  }
-  .corner svg { width: 100%; height: 100%; }
-  .corner-tl { top: 0;    left: 0; }
-  .corner-tr { top: 0;    right: 0; transform: scaleX(-1); }
-  .corner-bl { bottom: 0; left: 0;  transform: scaleY(-1); }
-  .corner-br { bottom: 0; right: 0; transform: scale(-1); }
+
 
   /* ── Main Panel ── */
   .panel {
@@ -149,7 +138,7 @@
   .topbar-dots span:nth-child(3) { background: #2a5a2a; }
 
   .topbar-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'Georgia', serif;
     font-size: 11px;
     letter-spacing: 2px;
     color: var(--gold);
@@ -212,7 +201,7 @@
 
   /* Heading */
   .panel-title {
-    font-family: 'Cinzel', serif;
+    font-family: 'Georgia', serif;
     font-size: 19px;
     font-weight: 600;
     letter-spacing: 1.5px;
@@ -446,36 +435,8 @@
 <!-- Floating embers (JS generated) -->
 <div id="embers"></div>
 
-<!-- Corner ornaments -->
-<div class="corner corner-tl">
-  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 120 L0 20 Q0 0 20 0 L120 0" stroke="#c8922a" stroke-width="1.5" fill="none"/>
-    <path d="M0 100 L0 30 Q0 12 18 12 L100 12" stroke="#8b0000" stroke-width="0.8" fill="none"/>
-    <circle cx="0" cy="0" r="6" fill="#c8922a" opacity="0.6"/>
-    <path d="M20 0 L20 20 L0 20" stroke="#c8922a" stroke-width="0.8" fill="none" opacity="0.5"/>
-  </svg>
-</div>
-<div class="corner corner-tr">
-  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 120 L0 20 Q0 0 20 0 L120 0" stroke="#c8922a" stroke-width="1.5" fill="none"/>
-    <path d="M0 100 L0 30 Q0 12 18 12 L100 12" stroke="#8b0000" stroke-width="0.8" fill="none"/>
-    <circle cx="0" cy="0" r="6" fill="#c8922a" opacity="0.6"/>
-  </svg>
-</div>
-<div class="corner corner-bl">
-  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 120 L0 20 Q0 0 20 0 L120 0" stroke="#c8922a" stroke-width="1.5" fill="none"/>
-    <path d="M0 100 L0 30 Q0 12 18 12 L100 12" stroke="#8b0000" stroke-width="0.8" fill="none"/>
-    <circle cx="0" cy="0" r="6" fill="#c8922a" opacity="0.6"/>
-  </svg>
-</div>
-<div class="corner corner-br">
-  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 120 L0 20 Q0 0 20 0 L120 0" stroke="#c8922a" stroke-width="1.5" fill="none"/>
-    <path d="M0 100 L0 30 Q0 12 18 12 L100 12" stroke="#8b0000" stroke-width="0.8" fill="none"/>
-    <circle cx="0" cy="0" r="6" fill="#c8922a" opacity="0.6"/>
-  </svg>
-</div>
+
+
 
 <!-- Main Panel -->
 <div class="panel">
