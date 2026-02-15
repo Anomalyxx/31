@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Security Check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+        font-family: 'Rajdhani', sans-serif;
+        background: #080808;
+        color: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .bg {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(40,200,80,.04) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    /* Hareketli partiküller */
+    .particle {
+        position: fixed;
+        border-radius: 50%;
+        background: rgba(255,255,255,.6);
+        filter: blur(.5px);
+        opacity: 0;
+        animation: fu var(--d,6s) var(--dl,0s) ease-in infinite;
+    }
+
+    @keyframes fu {
+        0%   { opacity:0; transform:translateY(0) scale(1); }
+        10%  { opacity:.7; }
+        90%  { opacity:.3; }
+        100% { opacity:0; transform:translateY(-100vh) scale(.2); }
+    }
+
+    .container {
+        position: relative;
+        z-index: 10;
+        max-width: 560px;
+        width: 92%;
+        background: #0f0f0f;
+        border-radius: 6px;
+        border: 1px solid #222;
+        box-shadow: 0 0 0 1px #1a1a1a, 0 40px 100px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.04);
+        overflow: hidden;
+    }
+
+    .container::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #111 0%, #2a2a2a 20%, #3a3a3a 50%, #2a2a2a 80%, #111 100%);
+    }
+
+    .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 11px 20px;
+        border-bottom: 1px solid #1a1a1a;
+        background: #0a0a0a;
+        position: relative;
+    }
+
+    .topbar::after {
+        content: '';
+        position: absolute;
+        bottom: -1px; left: 50%;
+        transform: translateX(-50%);
+        width: 60px; height: 1px;
+        background: #2a2a2a;
+    }
+
+    .dots span {
+        display: inline-block;
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        margin-right: 6px;
+        background: #1e1e1e;
+        animation: glow 2.1s ease-in-out infinite;
+    }
+    .dots span:nth-child(1) { animation-delay: 0s; }
+    .dots span:nth-child(2) { animation-delay: 0.7s; }
+    .dots span:nth-child(3) { animation-delay: 1.4s; }
+
+    @keyframes glow {
+        0%, 100% { background: #1e1e1e; box-shadow: none; transform: scale(1); }
+        30%, 60% { background: #28c840; box-shadow: 0 0 8px rgba(40,200,64,.8); transform: scale(1.25); }
+    }
+
+    .topbar-title {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 11px;
+        letter-spacing: 4px;
+        color: #404040;
+        text-transform: uppercase;
+    }
+
+    .topbar-badge {
+        font-size: 10px;
+        color: #404040;
+        letter-spacing: 2px;
+        border: 1px solid #2a2a2a;
+        padding: 3px 10px;
+        border-radius: 2px;
+        font-family: 'Share Tech Mono', monospace;
+        background: #0d0d0d;
+        clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+    }
+
+    .inner {
+        padding: 38px 48px 30px;
+        text-align: center;
+    }
+
+    .logo {
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    .logo-frame {
+        display: inline-block;
+        position: relative;
+        padding: 12px 20px;
+    }
+
+    .logo-frame::before,
+    .logo-frame::after {
+        content: '';
+        position: absolute;
+        width: 14px; height: 14px;
+        border-color: #2a2a2a;
+        border-style: solid;
+    }
+    .logo-frame::before { top:0; left:0; border-width:1px 0 0 1px; }
+    .logo-frame::after  { bottom:0; right:0; border-width:0 1px 1px 0; }
+
+    .logo img {
+        max-height: 160px;
+        max-width: 340px;
+        filter: brightness(1.2) drop-shadow(0 0 24px rgba(255,255,255,.2)) drop-shadow(0 0 8px rgba(255,255,255,.1));
+    }
+
+    .mech-div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 22px;
+    }
+
+    .mech-div .ln { flex:1; height:1px; background:#1e1e1e; }
+    .mech-div .mid { display:flex; align-items:center; gap:4px; }
+    .mech-div .sq { width:4px; height:4px; background:#2a2a2a; transform:rotate(45deg); }
+    .mech-div .ln2 { width:16px; height:1px; background:#2a2a2a; }
+
+    h1 {
+        font-size: 23px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 12px;
+        letter-spacing: -.2px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        line-height: 1.75;
+        color: #555;
+        margin-bottom: 26px;
+    }
+
+    .subtitle b { color: #888; font-weight: 600; }
+
+    .status {
+        background: #0c0c0c;
+        border: 1px solid #1e1e1e;
+        border-radius: 4px;
+        padding: 14px 18px;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+        position: relative;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+    }
+
+    .ring {
+        width: 28px; height: 28px;
+        border: 2px solid #1e1e1e;
+        border-top-color: #888;
+        border-right-color: #444;
+        border-radius: 50%;
+        animation: sp .9s linear infinite;
+        flex-shrink: 0;
+    }
+
+    @keyframes sp { to { transform: rotate(360deg); } }
+
+    .status-text strong { display:block; font-size:14px; font-weight:600; color:#bbb; margin-bottom:2px; }
+    .status-text span { font-size:11px; color:#3a3a3a; font-family:'Share Tech Mono',monospace; letter-spacing:.5px; }
+
+    .captcha-wrap { display:flex; justify-content:center; margin-bottom:24px; }
+
+    .sep { height:1px; background:#161616; margin-bottom:18px; }
+
+    .footer { display:flex; align-items:center; justify-content:space-between; }
+
+    .footer-brand {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 10px;
+        color: #2a2a2a;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .ray-id {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 10px;
+        color: #252525;
+        letter-spacing: 1px;
+    }
+</style>
+</head>
+
+<body>
+    <div class="bg"></div>
+    <div id="pts"></div>
+
+    <div class="container">
+        <div class="topbar">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <div class="topbar-title">HexShield</div>
+            <div class="topbar-badge">PROTECTED</div>
+        </div>
+
+        <div class="inner">
+
+            <div class="logo">
+                <div class="logo-frame">
+                    <img src="https://i.hizliresim.com/cxaib6c.png" alt="AlwaysCheats">
+                </div>
+            </div>
+
+            <div class="mech-div">
+                <div class="ln"></div>
+                <div class="mid">
+                    <div class="sq"></div>
+                    <div class="ln2"></div>
+                    <div class="sq"></div>
+                </div>
+                <div class="ln"></div>
+            </div>
+
+            <h1>Please Verify You're Human</h1>
+
+            <div class="subtitle">
+                Completing the CAPTCHA helps us ensure you're not a <b>bot</b> or <b>automated tool</b>.
+            </div>
+
+            <div class="status">
+                <div class="ring"></div>
+                <div class="status-text">
+                    <strong>Security verification in progress</strong>
+                    <span>BOT_PROTECTION: ACTIVE &middot; REQUEST: PROCESSING</span>
+                </div>
+            </div>
+
+            <div class="captcha-wrap">
+                <div class="cf-turnstile" data-sitekey="::IM_UNDER_ATTACK_BOX::"></div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div class="footer">
+                <div class="footer-brand">HexShield</div>
+                <div class="ray-id" id="ray-id">REF: -</div>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    document.getElementById("ray-id").textContent = "REF: " + Math.random().toString(36).substring(2,12).toUpperCase();
+    var c = document.getElementById("pts");
+    for (var i = 0; i < 22; i++) {
+        var e = document.createElement("div");
+        var s = (Math.random() * 2.5 + 1).toFixed(1);
+        e.className = "particle";
+        e.style.cssText = "width:" + s + "px;height:" + s + "px;left:" + (Math.random()*100).toFixed(1) + "vw;bottom:" + (Math.random()*20).toFixed(1) + "vh;--d:" + (5+Math.random()*10).toFixed(1) + "s;--dl:" + (Math.random()*8).toFixed(1) + "s";
+        c.appendChild(e);
+    }
+</script>
+</body>
+</html>
