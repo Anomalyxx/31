@@ -2,114 +2,165 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Security Check</title>
+<title>Just a moment — HexShield</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
     body {
         margin: 0;
         padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: #f4f6f8;
-        color: #1a1a1a;
+        font-family: 'SF Mono', 'Consolas', 'Courier New', monospace;
+        background-color: #000000;
+        color: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 100vh;
+        min-height: 100vh;
     }
 
+    /* CRT scanlines */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        background: repeating-linear-gradient(
+            0deg, transparent, transparent 2px,
+            rgba(255,255,255,.004) 2px, rgba(255,255,255,.004) 4px
+        );
+    }
+
+    /* Moving scan line */
+    body::after {
+        content: '';
+        position: fixed;
+        top: 0; left: -100%;
+        width: 100%; height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+        animation: scan 7s linear infinite;
+        pointer-events: none;
+        z-index: 0;
+    }
+    @keyframes scan { to { left: 100%; } }
+
     .container {
-        max-width: 560px;
-        background: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
-        padding: 45px;
+        position: relative;
+        z-index: 10;
+        max-width: 520px;
+        width: 90%;
+        background: #080808;
+        border: 1px solid #1e1e1e;
+        border-radius: 3px;
+        padding: 42px 44px;
         text-align: center;
     }
 
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 26px;
+    }
+
     .logo img {
-        max-width: 180px;
-        margin-bottom: 28px;
+        width: 100px;
+        height: 100px;
+        object-fit: contain;
+        display: block;
+        filter: brightness(0) invert(1) opacity(0.9);
     }
 
     h1 {
-        font-size: 24px;
-        margin-bottom: 14px;
-        color: #111;
+        font-size: 20px;
+        font-weight: 400;
+        margin-bottom: 12px;
+        color: #ffffff;
+        letter-spacing: .3px;
     }
 
     .subtitle {
-        font-size: 15px;
-        line-height: 1.7;
-        color: #555;
-        margin-bottom: 28px;
+        font-size: 12px;
+        line-height: 1.8;
+        color: #555555;
+        margin-bottom: 26px;
+        letter-spacing: .3px;
     }
 
     .status {
-        background: #f1f3f5;
-        border-radius: 6px;
-        padding: 14px;
-        font-size: 14px;
-        color: #333;
+        background: #0d0d0d;
+        border: 1px solid #1a1a1a;
+        border-radius: 2px;
+        padding: 13px 16px;
+        font-size: 11px;
+        color: #888888;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
         margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
     }
+
+    .status::before {
+        content: '';
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        border: 1.5px solid rgba(255,255,255,.1);
+        border-top-color: #888;
+        animation: spin .9s linear infinite;
+        flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .divider {
         height: 1px;
-        background: #e6e6e6;
-        margin: 28px 0;
+        background: #141414;
+        margin: 26px 0;
     }
 
     .footer {
-        font-size: 12px;
-        color: #999;
+        font-size: 11px;
+        color: #333333;
+        letter-spacing: .5px;
     }
 
     .ray-id {
-        margin-top: 18px;
-        font-size: 11px;
-        color: #777;
-        font-family: monospace;
+        margin-top: 14px;
+        font-size: 10px;
+        color: #2e2e2e;
+        font-family: 'SF Mono', 'Consolas', monospace;
+        letter-spacing: .5px;
     }
 </style>
 </head>
-
 <body>
     <div class="container">
-
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Akamai_logo.svg/1280px-Akamai_logo.svg.png" alt="Akamai Logo">
+            <img src="https://i.hizliresim.com/1zyg71m.png" alt="HexShield" draggable="false">
         </div>
-
         <h1>Checking your browser</h1>
-
         <div class="subtitle">
             This process is automatic and helps protect our services from
             malicious traffic. Your request will continue shortly.
         </div>
-
         <div class="status">
             Security verification in progress
         </div>
 
-        <!-- UAM / CAPTCHA alanı -->
         ::CAPTCHA_BOX::
 
         <div class="divider"></div>
-
         <div class="footer">
-            Powered by Akamai Intelligent Edge
+            Performance &amp; security by HexShield
         </div>
-
         <div class="ray-id">
             Reference ID: <span id="ray-id">—</span>
         </div>
-
     </div>
-
 <script>
     document.getElementById("ray-id").textContent =
-        Math.random().toString(36).substring(2, 18);
+        Math.random().toString(36).substring(2, 18).toUpperCase();
 </script>
 </body>
 </html>
