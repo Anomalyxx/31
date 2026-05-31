@@ -27,8 +27,8 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-start; /* Sola yaslı */
-      padding: 130px 40px 60px 15%; /* İçeriği hafif yana almak için sol boşluk %12 yapıldı */
+      align-items: flex-start; /* İçeriği sola yaslar */
+      padding: 130px 40px 60px 12%; /* İstediğin gibi hafifçe yana almak için %12 sol boşluk */
       position: relative;
       overflow-x: hidden;
     }
@@ -47,7 +47,7 @@
     }
     @keyframes scan { to { left: 100%; } }
 
-    /* Kurumsal Güvenli Grid */
+    /* Kurumsal Güvenli Grid - Tüm elementler tam sol çizgi sınırına sıfır hizalıdır */
     .container {
       width: 100%;
       max-width: 600px;
@@ -156,8 +156,8 @@
       letter-spacing: 1px;
     }
 
-    /* İsteğin Üzerine Alta Alınan Temiz Captcha Kapsül Alanı */
-    .captcha-container {
+    /* Altta Duran, Çizgiyle Sıfır Hizalanmış UAM Kapsül Alanı */
+    .attack-container {
       width: 100%;
       margin-bottom: 48px;
       min-height: 65px;
@@ -166,9 +166,10 @@
       align-items: center;
     }
 
-    /* Cloudflare Turnstile Yapılandırması */
-    #challenge-stage, .cloudflare-wrapper, #cf-challenge, iframe {
+    /* Cloudflare Turnstile / UAM Koyu Tema Zorunlu CSS Entegrasyonu */
+    #challenge-stage, .cloudflare-wrapper, #cf-challenge, iframe, #cf-wrapper {
       color-scheme: dark !important;
+      background: transparent !important;
       background-color: transparent !important;
     }
 
@@ -216,6 +217,7 @@
       letter-spacing: 0.5px;
     }
 
+    /* Ekran Küçüldükçe Boşluğu Daraltan Güvenlik Kırılmaları */
     @media (max-width: 992px) {
       body { padding-left: 6%; }
     }
@@ -253,8 +255,8 @@
       </div>
     </div>
 
-    <div class="captcha-container">
-      ::CAPTCHA_BOX::
+    <div class="attack-container">
+      ::IM_UNDER_ATTACK_BOX::
     </div>
 
     <div class="footer">
@@ -304,7 +306,7 @@
           progressText.textContent = Math.floor(progress) + '% COMPLETE';
           requestAnimationFrame(updateProgress);
         } else {
-          progressText.textContent = '100% ENVIRONMENT_VERIFIED // AWAITING TOKEN';
+          progressText.textContent = '100% ENVIRONMENT_VERIFIED // UNDER_ATTACK_MITIGATION';
         }
       }
 
