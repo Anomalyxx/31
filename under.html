@@ -9,7 +9,6 @@
 
     :root {
       --border:    #141414;
-      --border-md: #1e1e1e;
       --border-hi: #282828;
       --text-muted: #555555;
       --text-dim:   #888888;
@@ -38,23 +37,15 @@
       pointer-events: none;
       z-index: 1;
       background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255,255,255,.005) 2px,
-        rgba(255,255,255,.005) 4px
+        0deg, transparent, transparent 2px,
+        rgba(255,255,255,.005) 2px, rgba(255,255,255,.005) 4px
       );
     }
 
     /* Moving scan line */
     .scan {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 1px;
-      z-index: 2;
-      pointer-events: none;
+      position: fixed; top: 0; left: -100%; width: 100%; height: 1px;
+      z-index: 2; pointer-events: none;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
       animation: scan 7s linear infinite;
     }
@@ -63,9 +54,11 @@
     .container {
       width: 100%;
       max-width: 580px;
-      text-align: left;
       position: relative;
       z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     /* ── HEADER ── */
@@ -77,16 +70,11 @@
     }
 
     .logo-section img {
-      width: 82px;
+      width: 72px;
       height: auto;
-      filter: drop-shadow(0 0 12px rgba(255,255,255,.07));
     }
 
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .header-right { display: flex; flex-direction: column; gap: 4px; }
 
     .site-name {
       font-size: 1.7rem;
@@ -108,24 +96,14 @@
     .protection-tag::before {
       content: '';
       display: inline-block;
-      width: 5px;
-      height: 5px;
+      width: 5px; height: 5px;
       border-radius: 50%;
       background: #3a3a3a;
       animation: pulse-dot 2s ease-in-out infinite;
     }
-    @keyframes pulse-dot {
-      0%, 100% { opacity: .4; }
-      50%       { opacity: 1; }
-    }
+    @keyframes pulse-dot { 0%,100%{opacity:.4} 50%{opacity:1} }
 
-    /* ── MAIN CONTENT ── */
-    .main-content {
-      width: 100%;
-      margin-bottom: 32px;
-    }
-
-    /* Status row */
+    /* ── STATUS ── */
     .status-line {
       display: flex;
       align-items: center;
@@ -137,20 +115,15 @@
     }
 
     .status-icon {
-      width: 16px;
-      height: 16px;
+      width: 16px; height: 16px;
       border: 1px solid var(--border-hi);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-
-    .status-icon.loading::after {
+    .status-icon::after {
       content: '';
-      width: 8px;
-      height: 8px;
+      width: 8px; height: 8px;
       border: 1.5px solid rgba(255,255,255,.08);
       border-top-color: #ffffff;
       border-radius: 50%;
@@ -158,13 +131,14 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Progress panel */
+    /* ── PROGRESS BOX ── */
     .progress-section {
       padding: 22px 24px;
       background: rgba(255,255,255,.018);
       border: 1px solid var(--border);
       border-radius: 2px;
       width: 100%;
+      margin-bottom: 24px;
     }
 
     .progress-header {
@@ -185,55 +159,23 @@
       font-size: .58rem;
       letter-spacing: 1px;
       color: var(--text-dim);
-      font-variant-numeric: tabular-nums;
     }
 
-    .progress-bar-container {
+    .bar-track {
       width: 100%;
       height: 1px;
       background: var(--border-hi);
       overflow: hidden;
-      margin-bottom: 18px;
     }
 
-    .progress-bar {
+    .bar-fill {
       height: 100%;
       background: #ffffff;
       width: 0%;
-      transition: width .1s linear;
+      transition: width .12s linear;
     }
 
-    /* Step list */
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    .step {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: .62rem;
-      letter-spacing: .8px;
-      color: var(--text-muted);
-      opacity: 0;
-      transition: opacity .35s ease, color .3s;
-    }
-
-    .step.show { opacity: 1; }
-    .step.active { color: var(--silver); }
-    .step.done   { color: #404040; }
-
-    .step-dot {
-      width: 3px;
-      height: 3px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0;
-    }
-
-    /* ── CAPTCHA SECTION ── */
+    /* ── CAPTCHA BOX ── */
     .captcha-section {
       width: 100%;
       margin-bottom: 40px;
@@ -244,25 +186,26 @@
     }
 
     .captcha-label {
+      display: block;
       font-size: .56rem;
       letter-spacing: 1.8px;
       color: var(--text-muted);
       text-transform: uppercase;
       margin-bottom: 16px;
-      display: block;
     }
 
+    /* Prevent CF widget from escaping its box */
     .captcha-inner {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+      display: block;
+      width: 100%;
       min-height: 65px;
     }
 
-    /* Force Turnstile dark */
-    iframe, #cf-wrapper, #cf-challenge, #challenge-stage, .cloudflare-wrapper {
-      color-scheme: dark !important;
-      background: transparent !important;
+    /* Override any absolute/fixed positioning CF might inject */
+    .captcha-inner > * {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
     }
 
     /* ── FOOTER ── */
@@ -280,19 +223,15 @@
       letter-spacing: .5px;
       display: flex;
       align-items: baseline;
-      gap: 0;
     }
 
     .footer-key {
       display: inline-block;
-      width: 80px;
+      width: 90px;
       flex-shrink: 0;
     }
 
-    .footer-val {
-      color: var(--text-dim);
-      font-weight: 400;
-    }
+    .footer-val { color: var(--text-dim); }
 
     .footer-brand {
       display: flex;
@@ -303,11 +242,7 @@
       border-top: 1px solid var(--border);
     }
 
-    .footer-brand img {
-      width: 14px;
-      height: auto;
-      opacity: .2;
-    }
+    .footer-brand img { width: 14px; height: auto; opacity: .2; }
 
     .footer-brand span {
       font-size: .6rem;
@@ -315,7 +250,6 @@
       letter-spacing: .5px;
     }
 
-    /* Responsive */
     @media (max-width: 992px) { body { padding-left: 6%; } }
     @media (max-width: 768px) {
       body { padding: 80px 24px 40px 24px; }
@@ -338,32 +272,24 @@
     </div>
     <div class="header-right">
       <div class="site-name" id="hostTitle">l7hard.cc</div>
-      <div class="protection-tag">HexShield</div>
+      <div class="protection-tag">DDoS Protection Active</div>
     </div>
   </div>
 
-  <!-- MAIN -->
-  <div class="main-content">
-    <div class="status-line">
-      <div class="status-icon loading" id="statusIcon"></div>
-      <span id="statusText">Checking your browser...</span>
+  <!-- STATUS -->
+  <div class="status-line">
+    <div class="status-icon"></div>
+    <span>Checking your browser...</span>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="progress-label-text">Verification Progress</span>
+      <span class="progress-pct" id="pctLabel">0%</span>
     </div>
-
-    <div class="progress-section">
-      <div class="progress-header">
-        <span class="progress-label-text">Verification Progress</span>
-        <span class="progress-pct" id="pctLabel">0%</span>
-      </div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-
-      <div class="steps">
-        <div class="step" id="s1"><div class="step-dot"></div>Browser fingerprint</div>
-        <div class="step" id="s2"><div class="step-dot"></div>TLS handshake validation</div>
-        <div class="step" id="s3"><div class="step-dot"></div>Behavioral analysis</div>
-        <div class="step" id="s4"><div class="step-dot"></div>Awaiting challenge token</div>
-      </div>
+    <div class="bar-track">
+      <div class="bar-fill" id="barFill"></div>
     </div>
   </div>
 
@@ -402,14 +328,13 @@
 (function () {
   'use strict';
 
-  // Host
   const host = window.location.hostname || 'l7hard.cc';
   document.getElementById('hostTitle').textContent = host;
 
   // Ray ID
-  const chars = '0123456789abcdef';
+  const h = '0123456789abcdef';
   let ray = '';
-  for (let i = 0; i < 16; i++) ray += chars[Math.floor(Math.random() * 16)];
+  for (let i = 0; i < 16; i++) ray += h[Math.floor(Math.random() * 16)];
   document.getElementById('rayId').textContent = ray.match(/.{4}/g).join('-').toUpperCase();
 
   // DC
@@ -425,58 +350,19 @@
         '104.28.' + Math.floor(Math.random() * 254) + '.' + Math.floor(Math.random() * 254);
     });
 
-  // Progress
-  const bar    = document.getElementById('progressBar');
-  const pct    = document.getElementById('pctLabel');
-  const status = document.getElementById('statusText');
-  const icon   = document.getElementById('statusIcon');
-
-  const steps    = ['s1','s2','s3','s4'].map(id => document.getElementById(id));
-  const triggers = [0, 0.20, 0.52, 0.80];
-  const labels   = [
-    'Analyzing browser fingerprint...',
-    'Validating TLS certificate...',
-    'Running behavioral analysis...',
-    'Awaiting challenge token...'
-  ];
-  const revealed = [false, false, false, false];
-  let activeStep = -1;
-
-  const TOTAL = 3000;
+  // Progress bar — stops at 85% to wait for captcha
+  const bar = document.getElementById('barFill');
+  const pct = document.getElementById('pctLabel');
+  const TOTAL = 2800;
   let start = null;
 
   function tick(ts) {
     if (!start) start = ts;
-    const progress = Math.min((ts - start) / TOTAL, 1);
+    const progress = Math.min((ts - start) / TOTAL, 0.85);
     const p = Math.floor(progress * 100);
-
     bar.style.width = p + '%';
     pct.textContent = p + '%';
-
-    triggers.forEach((t, i) => {
-      if (progress >= t && !revealed[i]) {
-        revealed[i] = true;
-        if (activeStep >= 0) {
-          steps[activeStep].classList.remove('active');
-          steps[activeStep].classList.add('done');
-        }
-        steps[i].classList.add('show', 'active');
-        activeStep = i;
-        status.textContent = labels[i];
-      }
-    });
-
-    if (progress < 1) {
-      requestAnimationFrame(tick);
-    } else {
-      pct.textContent = '100%';
-      status.textContent = '100% ENVIRONMENT_VERIFIED // AWAITING TOKEN';
-      if (activeStep >= 0) {
-        steps[activeStep].classList.remove('active');
-        steps[activeStep].classList.add('done');
-      }
-      icon.classList.remove('loading');
-    }
+    if (progress < 0.85) requestAnimationFrame(tick);
   }
 
   requestAnimationFrame(tick);
