@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Security Check — HexShield</title>
+  <title>Just a moment — HexShield</title>
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -16,7 +16,7 @@
       --border-mid: #222222;
       --text-muted: #555555;
       --text-dim: #888888;
-      --silver: #d1d1d1;
+      --silver: #dadada;
     }
 
     body {
@@ -24,7 +24,10 @@
       background: #000000;
       color: #ffffff;
       min-height: 100vh;
-      padding: 60px 20px;
+      display: flex;
+      justify-content: center; /* Konteyneri ekranda dengeli ortalar */
+      align-items: flex-start;
+      padding: 140px 60px 60px 60px; /* Hafif yana alma hissi için hassas sol/sağ boşluk */
       position: relative;
       overflow-x: hidden;
     }
@@ -32,48 +35,32 @@
     /* Arka Plan CRT / Scanline Efekti */
     body::before {
       content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.006) 2px, rgba(255,255,255,.006) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.005) 2px, rgba(255,255,255,.005) 4px);
     }
 
     /* Hareketli Gümüş HUD Tarama Çizgisi */
     .scan {
       position: fixed; top: 0; left: -100%; width: 100%; height: 1px; z-index: 2; pointer-events: none;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
-      animation: scan 6s linear infinite;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent);
+      animation: scan 7s linear infinite;
     }
     @keyframes scan { to { left: 100%; } }
 
-    /* Geometrik Matris Izgarası */
-    .geometric-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0.02;
-      background-image: 
-          linear-gradient(90deg, #fff 1px, transparent 1px),
-          linear-gradient(180deg, #fff 1px, transparent 1px);
-      background-size: 60px 60px;
-      z-index: 0;
-    }
-
-    /* Ana Konteyner (Sol Hizalı - Görseldeki Gibi) */
+    /* Kurumsal Güvenli Grid (İçerik kendi içinde sola yaslı, genel yapı dengeli) */
     .container {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding-top: 40px;
+      width: 100%;
+      max-width: 900px;
+      text-align: left;
       position: relative;
       z-index: 10;
     }
 
-    /* Başlık Alanı */
+    /* Kurumsal Başlık Alanı */
     .header {
       display: flex;
       align-items: center;
-      gap: 16px;
-      margin-bottom: 80px;
+      gap: 28px;
+      margin-bottom: 64px;
     }
 
     .logo-section {
@@ -81,39 +68,40 @@
       align-items: center;
     }
 
+    /* İstediğin gibi büyütülmüş ultra keskin kurumsal logo (75px) */
     .logo-section img {
-      width: 42px;
+      width: 75px;
       height: auto;
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.08));
     }
 
     .site-info {
-      font-size: 1.35rem;
+      font-size: 1.65rem;
       color: #ffffff;
-      font-weight: 300;
-      letter-spacing: 1px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
     }
 
     .main-content {
-      margin-bottom: 60px;
+      width: 100%;
+      margin-bottom: 48px;
     }
 
-    /* Ana Durum Metni */
+    /* Durum Satırı */
     .status-line {
       display: flex;
       align-items: center;
       gap: 16px;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--silver);
       letter-spacing: 0.5px;
       margin-bottom: 32px;
-      text-transform: uppercase;
     }
 
     /* Teknolojik Döngüsel Yükleyici */
     .status-icon {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 1px solid var(--border-mid);
       border-radius: 50%;
       display: flex;
@@ -124,27 +112,12 @@
 
     .status-icon.loading::after {
       content: '';
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border: 1.5px solid rgba(255, 255, 255, 0.1);
       border-top-color: #ffffff;
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-    }
-
-    .status-icon.success {
-      border-color: #ffffff;
-      background: #ffffff;
-    }
-
-    .status-icon.success::after {
-      content: '';
-      width: 5px;
-      height: 8px;
-      border: solid #000000;
-      border-width: 0 1.5px 1.5px 0;
-      transform: rotate(45deg);
-      margin-top: -1px;
     }
 
     @keyframes spin {
@@ -152,14 +125,14 @@
       to { transform: rotate(360deg); }
     }
 
-    /* İlerleme Paneli (HUD Kutu Modu) */
+    /* İlerleme Segmenti */
     .progress-section {
-      margin: 24px 0;
+      margin: 24px 0 32px 0;
       padding: 24px;
-      background: rgba(3, 3, 3, 0.85);
+      background: rgba(2, 2, 2, 0.4);
       border: 1px solid var(--border);
       border-radius: 2px;
-      max-width: 550px;
+      max-width: 540px;
     }
 
     .progress-bar-container {
@@ -167,7 +140,7 @@
       height: 2px;
       background: var(--border-mid);
       overflow: hidden;
-      margin: 16px 0 8px;
+      margin: 16px 0 8px 0;
     }
 
     .progress-bar {
@@ -175,84 +148,48 @@
       background: #ffffff;
       width: 0%;
       transition: width 0.1s linear;
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
     }
 
     .progress-text {
-      font-size: 0.65rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       letter-spacing: 1px;
     }
 
-    /* Aşama Doğrulama Kutusu */
-    .challenge-step {
-      display: flex;
-      align-items: center;
-      padding: 16px 24px;
-      margin: 16px 0;
+    /* Cloudflare Doğrulama Kutusu (Sistem buraya kusursuz oturacak) */
+    .captcha-viewport {
+      max-width: 540px;
+      width: 100%;
+      margin: 24px 0;
+      padding: 20px;
       background: rgba(3, 3, 3, 0.85);
       border: 1px solid var(--border);
       border-radius: 2px;
-      font-size: 0.72rem;
-      color: var(--text-dim);
-      letter-spacing: 0.5px;
-      max-width: 550px;
-      text-transform: uppercase;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      min-height: 84px;
     }
 
-    .challenge-step.active {
-      border-color: var(--border-mid);
-      color: #ffffff;
-    }
-
-    .spinner {
-      width: 14px;
-      height: 14px;
-      margin-right: 16px;
-      border: 1.5px solid var(--border-mid);
-      border-top-color: #ffffff;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      flex-shrink: 0;
-    }
-
-    .spinner.success {
-      border: 1.5px solid #ffffff;
-      background: #ffffff;
-      animation: none;
-      position: relative;
-    }
-
-    .spinner.success::after {
-      content: '';
-      position: absolute;
-      top: 2px; left: 4px;
-      width: 3px; height: 6px;
-      border: solid #000;
-      border-width: 0 1.2px 1.2px 0;
-      transform: rotate(45deg);
-    }
-
-    /* Konsol Tipi Footer Veri Satırları */
+    /* Konsol Tipi Altyapı Bilgi Alanı */
     .footer {
-      margin-top: 80px;
+      margin-top: 56px;
       padding-top: 32px;
       border-top: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       gap: 12px;
-      max-width: 600px;
     }
 
     .footer-item {
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       letter-spacing: 0.5px;
     }
 
     .footer-item span {
       display: inline-block;
-      width: 80px;
+      width: 90px;
     }
 
     .footer-item strong {
@@ -264,111 +201,70 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 20px;
     }
 
     .footer-shield img {
-      width: 18px;
+      width: 16px;
       height: auto;
-      opacity: 0.4;
+      opacity: 0.3;
     }
 
     .footer-shield span {
-      font-size: 0.62rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    /* Arka Plandaki Parçacıklar */
-    .floating-elements {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .floating-hex {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      background: #ffffff;
-      opacity: 0.05;
-      animation: float linear infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(100vh); opacity: 0; }
-      10% { opacity: 0.08; }
-      90% { opacity: 0.08; }
-      100% { transform: translateY(-50px); opacity: 0; }
+      letter-spacing: 0.5px;
     }
 
     @media (max-width: 768px) {
-      body { padding: 40px 24px; }
-      .container { padding-top: 20px; }
-      .header { margin-bottom: 50px; }
-      .site-info { font-size: 1.1rem; }
-      .status-line { font-size: 0.75rem; }
+      body { padding: 80px 24px 40px 24px; }
+      .header { margin-bottom: 48px; gap: 20px; }
+      .logo-section img { width: 60px; }
+      .site-info { font-size: 1.4rem; }
     }
   </style>
 </head>
 <body>
   <div class="scan"></div>
-  <div class="geometric-bg"></div>
-  <div class="floating-elements" id="floatingElements"></div>
 
   <div class="container">
-    <!-- Logolu Header Üst Alanı -->
     <div class="header">
       <div class="logo-section">
         <img src="https://i.hizliresim.com/1zyg71m.png" alt="HexShield">
       </div>
-      <h1 class="site-info" id="hostTitle">hexbear.xyz</h1>
+      <div class="site-info" id="hostTitle">hexbear.xyz</div>
     </div>
 
-    <!-- Dinamik İlerleme ve Tarama Alanı -->
     <div class="main-content">
       <div class="status-line">
         <div class="status-icon loading" id="statusIcon"></div>
-        <span id="statusText">Checking browser environment...</span>
+        <span id="statusText">Checking your browser...</span>
       </div>
 
       <div class="progress-section">
-        <div class="progress-text" id="progressText">0% INGESTION</div>
+        <div class="progress-text" id="progressText">0% MATRIX_CHECK</div>
         <div class="progress-bar-container">
           <div class="progress-bar" id="progressBar"></div>
         </div>
       </div>
 
-      <div class="challenge-step active">
-        <div class="spinner" id="spinner"></div>
-        <div>Verifying cryptographic browser integrity</div>
+      <div class="captcha-viewport">
+        ::CAPTCHA_BOX::
       </div>
     </div>
 
-    <!-- Orijinal Arka Plan Gönderim Formu -->
-    <form id="challengeForm" action="/verify-challenge" method="POST" style="display: none;">
-      <input type="hidden" name="challenge_response" id="challengeResponse">
-      <input type="hidden" name="original_path" id="originalPath">
-    </form>
-
-    <!-- Ağ ve Lisans Detay Bilgileri -->
     <div class="footer">
       <div class="footer-item">
-        <span>RAY_ID:</span>
+        <span>Ray ID:</span>
         <strong id="rayId">—</strong>
       </div>
       <div class="footer-item">
-        <span>CLIENT_IP:</span>
+        <span>Your IP:</span>
         <strong id="userIp">DETECTING...</strong>
       </div>
       <div class="footer-shield">
         <img src="https://i.hizliresim.com/1zyg71m.png" alt="HexShield">
-        <span>Performance &amp; security infrastructure by HexShield</span>
+        <span>Performance &amp; security by HexShield</span>
       </div>
     </div>
   </div>
@@ -377,38 +273,13 @@
     (function() {
       'use strict';
       
-      const CONFIG = {
-        processingTime: 3000,
-        redirectDelay: 800
-      };
-
-      const statusIcon = document.getElementById('statusIcon');
-      const statusText = document.getElementById('statusText');
+      const CONFIG = { processingTime: 2500 };
       const progressBar = document.getElementById('progressBar');
       const progressText = document.getElementById('progressText');
-      const spinner = document.getElementById('spinner');
 
-      /* Mevcut domaini başlığa otomatik bağla */
+      /* Canlı Domain Ataması */
       const currentHost = window.location.hostname || "hexbear.xyz";
       document.getElementById('hostTitle').textContent = currentHost;
-      statusText.textContent = 'Checking your browser before accessing ' + currentHost;
-      
-      document.getElementById('originalPath').value = window.location.pathname + window.location.search;
-
-      /* Kriptografik Parçacık Döngüsü */
-      function createFloatingElement() {
-        const element = document.createElement('div');
-        element.className = 'floating-hex';
-        element.style.left = Math.random() * 100 + '%';
-        element.style.animationDuration = (Math.random() * 8 + 6) + 's';
-        
-        const container = document.getElementById('floatingElements');
-        if(container) {
-          container.appendChild(element);
-          setTimeout(() => { if (element.parentNode) element.parentNode.removeChild(element); }, 14000);
-        }
-      }
-      setInterval(createFloatingElement, 1200);
 
       function generateRayId() {
         const chars = '0123456789abcdef';
@@ -419,57 +290,16 @@
         return id.match(/.{1,4}/g).join('-');
       }
 
-      function generateCanvasFingerprint() {
-        try {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          canvas.width = 200; canvas.height = 50;
-          ctx.textBaseline = 'top'; ctx.font = '14px Arial';
-          ctx.fillText('HexShield Core Trace', 2, 2);
-          return canvas.toDataURL();
-        } catch(e) {
-          return 'fallback_' + Math.random().toString(36).substring(2, 9);
-        }
-      }
-
-      let startTime;
+      let startTime = Date.now();
       function updateProgress() {
         const elapsed = Date.now() - startTime;
         const progress = Math.min((elapsed / CONFIG.processingTime) * 100, 100);
         
         progressBar.style.width = progress + '%';
-        progressText.textContent = Math.floor(progress) + '% FRAME_ANALYSIS';
+        progressText.textContent = Math.floor(progress) + '% COMPLETE';
 
         if (progress < 100) {
           requestAnimationFrame(updateProgress);
-        } else {
-          completeChallenge();
-        }
-      }
-
-      function completeChallenge() {
-        try {
-          statusIcon.classList.remove('loading');
-          statusIcon.classList.add('success');
-          statusText.textContent = currentHost + ' connection verified';
-          spinner.classList.add('success');
-         
-          const challengeData = {
-            timestamp: Date.now(),
-            ua: btoa(navigator.userAgent),
-            screen: screen.width + 'x' + screen.height,
-            tz: new Date().getTimezoneOffset(),
-            canvas: generateCanvasFingerprint()
-          };
-
-          document.getElementById('challengeResponse').value = btoa(JSON.stringify(challengeData));
-
-          setTimeout(() => {
-            document.getElementById('challengeForm').submit();
-          }, CONFIG.redirectDelay);
-          
-        } catch (error) {
-          document.getElementById('challengeForm').submit();
         }
       }
 
@@ -484,13 +314,9 @@
           document.getElementById('userIp').textContent = '104.28.' + Math.floor(Math.random() * 254) + '.249';
         }
       }
+      
       fetchUserIP();
-
-      setTimeout(() => {
-        startTime = Date.now();
-        requestAnimationFrame(updateProgress);
-      }, 400);
-
+      requestAnimationFrame(updateProgress);
     })();
   </script>
 </body>
