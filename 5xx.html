@@ -20,6 +20,8 @@
     .h-title{font-size:2.6rem;font-weight:300;letter-spacing:2px;line-height:1;color:#fff}
     .h-badge{background:#0d0d0d;border:1px solid #3a1515;border-radius:3px;padding:4px 12px;font-size:.6rem;letter-spacing:2px;color:var(--red);text-transform:uppercase;}
     .h-time{font-size:.62rem;color:#2a2a2a;letter-spacing:.5px}
+    
+    /* Diagram Band */
     .diag-band{background:rgba(4,4,4,.97);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:44px -60px 0;padding:52px 60px;}
     .diag{display:flex;align-items:center;justify-content:center;max-width:680px;margin:0 auto;}
     .node{display:flex;flex-direction:column;align-items:center;gap:10px;flex:0 0 auto}
@@ -36,13 +38,47 @@
     .n-status.err{color:var(--red)}
     .conn{flex:1;padding:0 12px;margin-bottom:34px}
     .conn-track{height:1px;width:100%;position:relative;overflow:hidden;background:var(--border);}
-    .conn-track.err{background:rgba(239,68,68,.2)}
+    .conn-track.err{background:rgba(239,68,68,.25)}
     .conn-shine{position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 3s linear infinite;}
-    .conn-track.err .conn-shine{background:linear-gradient(90deg,transparent,rgba(239,68,68,.5),transparent);}
+    .conn-track.err .conn-shine{background:linear-gradient(90deg,transparent,rgba(239,68,68,.6),transparent);}
     @keyframes shine{to{left:100%}}
+    
     .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding:52px 0;}
     .content-block h3{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:#ccc;margin-bottom:14px;}
     .content-block p{font-size:.67rem;color:#555;line-height:1.9;}
+    
+    /* Cloudflare Error Box Wrapper Styles */
+    .cf-box-wrapper {
+      background: #040404;
+      border: 1px dashed var(--border-mid);
+      padding: 24px;
+      margin-bottom: 44px;
+      position: relative;
+    }
+    .cf-box-wrapper::before {
+      content: 'CLOUDFLARE_DIAGNOSTICS_LOG';
+      position: absolute;
+      top: -8px;
+      left: 16px;
+      background: #000;
+      padding: 0 8px;
+      font-size: 0.52rem;
+      color: #444;
+      letter-spacing: 2px;
+    }
+    /* Forces Cloudflare injected text/tables to style properly within our HUD */
+    .cf-box-wrapper #cf-error-details, 
+    .cf-box-wrapper .cf-error-overview,
+    .cf-box-wrapper p, 
+    .cf-box-wrapper tfoot, 
+    .cf-box-wrapper thead {
+      font-family: inherit !important;
+      color: #666 !important;
+      font-size: 0.65rem !important;
+      line-height: 1.6 !important;
+    }
+    .cf-box-wrapper a { color: var(--green) !important; text-decoration: none; }
+
     .divider{height:1px;background:var(--border)}
     .footer-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0;font-size:.57rem;color:#1e1e1e;letter-spacing:.5px;}
     #userIp{cursor:pointer;color:#2e2e2e;text-decoration:underline dotted;text-underline-offset:3px;}
@@ -62,7 +98,7 @@
   <div class="hero">
     <div class="hero-row">
       <div class="h-title">Server Error</div>
-      <div class="h-badge">Error 5xx</div>
+      <div class="h-badge">Error 5xx Connection Failed</div>
     </div>
     <div class="h-time" id="errTime">—</div>
   </div>
@@ -115,6 +151,11 @@
       <p>This structural malfunction is unrelated to your client computer setup or network provider. Please terminate current socket attempts and allow the infrastructure automated recovery protocols to deploy. Contact administration if the timeout loop persists.</p>
     </div>
   </div>
+
+  <div class="cf-box-wrapper">
+    ::CLOUDFLARE_ERROR_500S_BOX::
+  </div>
+
   <div class="divider"></div>
   <div class="footer-bar">
     <span>HexShield Ray ID: <strong id="rayId">—</strong> &nbsp;&nbsp; Your IP: <span id="userIp">Click to reveal</span> &nbsp;&nbsp; Core network by <a href="#" style="color:#333;text-decoration:none">HexShield</a></span>
