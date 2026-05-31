@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Check — HexShield</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --border: #141414;
+      --border-mid: #222222;
+      --text-muted: #555555;
+      --text-dim: #888888;
+      --silver: #d1d1d1;
+    }
+
+    body {
+      font-family: 'SF Mono', 'Monaco', 'Consolas', 'Courier New', monospace;
+      background: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      padding: 60px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Arka Plan CRT / Scanline Efekti */
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,.006) 2px, rgba(255,255,255,.006) 4px);
+    }
+
+    /* Hareketli Gümüş HUD Tarama Çizgisi */
+    .scan {
+      position: fixed; top: 0; left: -100%; width: 100%; height: 1px; z-index: 2; pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      animation: scan 6s linear infinite;
+    }
+    @keyframes scan { to { left: 100%; } }
+
+    /* Geometrik Matris Izgarası */
+    .geometric-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.02;
+      background-image: 
+          linear-gradient(90deg, #fff 1px, transparent 1px),
+          linear-gradient(180deg, #fff 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: 0;
+    }
+
+    /* Ana Konteyner (Sol Hizalı - Görseldeki Gibi) */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-top: 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Başlık Alanı */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 80px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-section img {
+      width: 42px;
+      height: auto;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+    }
+
+    .site-info {
+      font-size: 1.35rem;
+      color: #ffffff;
+      font-weight: 300;
+      letter-spacing: 1px;
+    }
+
+    .main-content {
+      margin-bottom: 60px;
+    }
+
+    /* Ana Durum Metni */
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--silver);
+      letter-spacing: 0.5px;
+      margin-bottom: 32px;
+      text-transform: uppercase;
+    }
+
+    /* Teknolojik Döngüsel Yükleyici */
+    .status-icon {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--border-mid);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .status-icon.loading::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .status-icon.success {
+      border-color: #ffffff;
+      background: #ffffff;
+    }
+
+    .status-icon.success::after {
+      content: '';
+      width: 5px;
+      height: 8px;
+      border: solid #000000;
+      border-width: 0 1.5px 1.5px 0;
+      transform: rotate(45deg);
+      margin-top: -1px;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* İlerleme Paneli (HUD Kutu Modu) */
+    .progress-section {
+      margin: 24px 0;
+      padding: 24px;
+      background: rgba(3, 3, 3, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      max-width: 550px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 2px;
+      background: var(--border-mid);
+      overflow: hidden;
+      margin: 16px 0 8px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #ffffff;
+      width: 0%;
+      transition: width 0.1s linear;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+    }
+
+    .progress-text {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* Aşama Doğrulama Kutusu */
+    .challenge-step {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      margin: 16px 0;
+      background: rgba(3, 3, 3, 0.85);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      max-width: 550px;
+      text-transform: uppercase;
+    }
+
+    .challenge-step.active {
+      border-color: var(--border-mid);
+      color: #ffffff;
+    }
+
+    .spinner {
+      width: 14px;
+      height: 14px;
+      margin-right: 16px;
+      border: 1.5px solid var(--border-mid);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .spinner.success {
+      border: 1.5px solid #ffffff;
+      background: #ffffff;
+      animation: none;
+      position: relative;
+    }
+
+    .spinner.success::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 4px;
+      width: 3px; height: 6px;
+      border: solid #000;
+      border-width: 0 1.2px 1.2px 0;
+      transform: rotate(45deg);
+    }
+
+    /* Konsol Tipi Footer Veri Satırları */
+    .footer {
+      margin-top: 80px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 600px;
+    }
+
+    .footer-item {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .footer-item span {
+      display: inline-block;
+      width: 80px;
+    }
+
+    .footer-item strong {
+      color: var(--text-dim);
+      font-weight: normal;
+    }
+
+    .footer-shield {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .footer-shield img {
+      width: 18px;
+      height: auto;
+      opacity: 0.4;
+    }
+
+    .footer-shield span {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Arka Plandaki Parçacıklar */
+    .floating-elements {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-hex {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      background: #ffffff;
+      opacity: 0.05;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); opacity: 0; }
+      10% { opacity: 0.08; }
+      90% { opacity: 0.08; }
+      100% { transform: translateY(-50px); opacity: 0; }
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 40px 24px; }
+      .container { padding-top: 20px; }
+      .header { margin-bottom: 50px; }
+      .site-info { font-size: 1.1rem; }
+      .status-line { font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scan"></div>
+  <div class="geometric-bg"></div>
+  <div class="floating-elements" id="floatingElements"></div>
+
+  <div class="container">
+    <!-- Logolu Header Üst Alanı -->
+    <div class="header">
+      <div class="logo-section">
+        <img src="https://i.hizliresim.com/1zyg71m.png" alt="HexShield">
+      </div>
+      <h1 class="site-info" id="hostTitle">hexbear.xyz</h1>
+    </div>
+
+    <!-- Dinamik İlerleme ve Tarama Alanı -->
+    <div class="main-content">
+      <div class="status-line">
+        <div class="status-icon loading" id="statusIcon"></div>
+        <span id="statusText">Checking browser environment...</span>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-text" id="progressText">0% INGESTION</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="challenge-step active">
+        <div class="spinner" id="spinner"></div>
+        <div>Verifying cryptographic browser integrity</div>
+      </div>
+    </div>
+
+    <!-- Orijinal Arka Plan Gönderim Formu -->
+    <form id="challengeForm" action="/verify-challenge" method="POST" style="display: none;">
+      <input type="hidden" name="challenge_response" id="challengeResponse">
+      <input type="hidden" name="original_path" id="originalPath">
+    </form>
+
+    <!-- Ağ ve Lisans Detay Bilgileri -->
+    <div class="footer">
+      <div class="footer-item">
+        <span>RAY_ID:</span>
+        <strong id="rayId">—</strong>
+      </div>
+      <div class="footer-item">
+        <span>CLIENT_IP:</span>
+        <strong id="userIp">DETECTING...</strong>
+      </div>
+      <div class="footer-shield">
+        <img src="https://i.hizliresim.com/1zyg71m.png" alt="HexShield">
+        <span>Performance &amp; security infrastructure by HexShield</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+      
+      const CONFIG = {
+        processingTime: 3000,
+        redirectDelay: 800
+      };
+
+      const statusIcon = document.getElementById('statusIcon');
+      const statusText = document.getElementById('statusText');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const spinner = document.getElementById('spinner');
+
+      /* Mevcut domaini başlığa otomatik bağla */
+      const currentHost = window.location.hostname || "hexbear.xyz";
+      document.getElementById('hostTitle').textContent = currentHost;
+      statusText.textContent = 'Checking your browser before accessing ' + currentHost;
+      
+      document.getElementById('originalPath').value = window.location.pathname + window.location.search;
+
+      /* Kriptografik Parçacık Döngüsü */
+      function createFloatingElement() {
+        const element = document.createElement('div');
+        element.className = 'floating-hex';
+        element.style.left = Math.random() * 100 + '%';
+        element.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        
+        const container = document.getElementById('floatingElements');
+        if(container) {
+          container.appendChild(element);
+          setTimeout(() => { if (element.parentNode) element.parentNode.removeChild(element); }, 14000);
+        }
+      }
+      setInterval(createFloatingElement, 1200);
+
+      function generateRayId() {
+        const chars = '0123456789abcdef';
+        let id = '';
+        for (let i = 0; i < 16; i++) {
+          id += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return id.match(/.{1,4}/g).join('-');
+      }
+
+      function generateCanvasFingerprint() {
+        try {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = 200; canvas.height = 50;
+          ctx.textBaseline = 'top'; ctx.font = '14px Arial';
+          ctx.fillText('HexShield Core Trace', 2, 2);
+          return canvas.toDataURL();
+        } catch(e) {
+          return 'fallback_' + Math.random().toString(36).substring(2, 9);
+        }
+      }
+
+      let startTime;
+      function updateProgress() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / CONFIG.processingTime) * 100, 100);
+        
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.floor(progress) + '% FRAME_ANALYSIS';
+
+        if (progress < 100) {
+          requestAnimationFrame(updateProgress);
+        } else {
+          completeChallenge();
+        }
+      }
+
+      function completeChallenge() {
+        try {
+          statusIcon.classList.remove('loading');
+          statusIcon.classList.add('success');
+          statusText.textContent = currentHost + ' connection verified';
+          spinner.classList.add('success');
+         
+          const challengeData = {
+            timestamp: Date.now(),
+            ua: btoa(navigator.userAgent),
+            screen: screen.width + 'x' + screen.height,
+            tz: new Date().getTimezoneOffset(),
+            canvas: generateCanvasFingerprint()
+          };
+
+          document.getElementById('challengeResponse').value = btoa(JSON.stringify(challengeData));
+
+          setTimeout(() => {
+            document.getElementById('challengeForm').submit();
+          }, CONFIG.redirectDelay);
+          
+        } catch (error) {
+          document.getElementById('challengeForm').submit();
+        }
+      }
+
+      document.getElementById('rayId').textContent = generateRayId().toUpperCase();
+
+      async function fetchUserIP() {
+        try {
+          const response = await fetch('https://api.ipify.org?format=json');
+          const data = await response.json();
+          document.getElementById('userIp').textContent = data.ip;
+        } catch (error) {
+          document.getElementById('userIp').textContent = '104.28.' + Math.floor(Math.random() * 254) + '.249';
+        }
+      }
+      fetchUserIP();
+
+      setTimeout(() => {
+        startTime = Date.now();
+        requestAnimationFrame(updateProgress);
+      }, 400);
+
+    })();
+  </script>
+</body>
+</html>
