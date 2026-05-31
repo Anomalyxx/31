@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>5XX Server Error — HexShield</title>
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    :root{--green:#4ade80;--red:#ef4444;--amber:#f59e0b;--border:#1f1f1f;--border-mid:#2a2a2a;}
+    html,body{min-height:100%;background:#000;color:#fff;font-family:'SF Mono','Monaco','Consolas','Courier New',monospace;overflow-x:hidden;}
+    body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.008) 2px,rgba(255,255,255,.008) 4px);}
+    .scan{position:fixed;top:0;left:-100%;width:100%;height:1px;z-index:1;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:scan 7s linear infinite;}
+    @keyframes scan{to{left:100%}}
+    .wrap{position:relative;z-index:10;max-width:1200px;margin:0 auto;padding:0 60px}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:32px 0;border-bottom:1px solid var(--border);}
+    .logo-text{font-size:1.35rem;font-weight:300;letter-spacing:5px;color:#fff;text-decoration:none}
+    .logo-tag{font-size:.52rem;color:#444;letter-spacing:3px;text-transform:uppercase;display:block;margin-top:1px}
+    .hero{padding:52px 0 0}
+    .hero-row{display:flex;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+    .h-title{font-size:2.6rem;font-weight:300;letter-spacing:2px;line-height:1;color:#fff}
+    .h-badge{background:#0d0d0d;border:1px solid #3a1515;border-radius:3px;padding:4px 12px;font-size:.6rem;letter-spacing:2px;color:var(--red);text-transform:uppercase;}
+    .h-time{font-size:.62rem;color:#2a2a2a;letter-spacing:.5px}
+    
+    /* Diagram Band */
+    .diag-band{background:rgba(4,4,4,.97);border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:44px -60px 0;padding:52px 60px;}
+    .diag{display:flex;align-items:center;justify-content:center;max-width:680px;margin:0 auto;}
+    .node{display:flex;flex-direction:column;align-items:center;gap:10px;flex:0 0 auto}
+    .ni{width:84px;height:84px;position:relative;display:flex;align-items:center;justify-content:center}
+    .ni svg.icon{width:60px;height:60px;color:#333}
+    .sdot{position:absolute;bottom:3px;right:3px;width:20px;height:20px;border-radius:50%;border:3px solid #000;display:flex;align-items:center;justify-content:center;}
+    .sdot.ok {background:var(--green)}
+    .sdot.err{background:var(--red)}
+    .sdot svg{width:10px;height:10px;stroke-width:3;color:#fff}
+    .n-label{font-size:.62rem;color:#333;letter-spacing:1.5px;text-transform:uppercase}
+    .n-name{font-size:.62rem;color:#555;letter-spacing:.5px;margin-top:-4px}
+    .n-status{font-size:.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+    .n-status.ok {color:var(--green)}
+    .n-status.err{color:var(--red)}
+    .conn{flex:1;padding:0 12px;margin-bottom:34px}
+    .conn-track{height:1px;width:100%;position:relative;overflow:hidden;background:var(--border);}
+    .conn-track.err{background:rgba(239,68,68,.25)}
+    .conn-shine{position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);animation:shine 3s linear infinite;}
+    .conn-track.err .conn-shine{background:linear-gradient(90deg,transparent,rgba(239,68,68,.6),transparent);}
+    @keyframes shine{to{left:100%}}
+    
+    .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding:52px 0;}
+    .content-block h3{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:#ccc;margin-bottom:14px;}
+    .content-block p{font-size:.67rem;color:#555;line-height:1.9;}
+    
+    /* Cloudflare Error Box Wrapper Styles */
+    .cf-box-wrapper {
+      background: #040404;
+      border: 1px dashed var(--border-mid);
+      padding: 24px;
+      margin-bottom: 44px;
+      position: relative;
+    }
+    .cf-box-wrapper::before {
+      content: 'CLOUDFLARE_DIAGNOSTICS_LOG';
+      position: absolute;
+      top: -8px;
+      left: 16px;
+      background: #000;
+      padding: 0 8px;
+      font-size: 0.52rem;
+      color: #444;
+      letter-spacing: 2px;
+    }
+    .cf-box-wrapper #cf-error-details, 
+    .cf-box-wrapper .cf-error-overview,
+    .cf-box-wrapper p, 
+    .cf-box-wrapper tfoot, 
+    .cf-box-wrapper thead {
+      font-family: inherit !important;
+      color: #666 !important;
+      font-size: 0.65rem !important;
+      line-height: 1.6 !important;
+    }
+    .cf-box-wrapper a { color: var(--green) !important; text-decoration: none; }
+
+    .divider{height:1px;background:var(--border)}
+    .footer-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:18px 0;font-size:.57rem;color:#1e1e1e;letter-spacing:.5px;}
+    #userIp{cursor:pointer;color:#2e2e2e;text-decoration:underline dotted;text-underline-offset:3px;}
+    @media(max-width:768px){.wrap{padding:0 20px}.diag-band{margin:32px -20px 0;padding:40px 20px}.content-grid{grid-template-columns:1fr;gap:28px;padding:36px 0}.h-title{font-size:1.8rem}}
+  </style>
+</head>
+<body>
+<div class="scan"></div>
+<div class="wrap">
+  <nav>
+    <div style="cursor:pointer">
+      <div class="logo-text">HexShield</div>
+      <span class="logo-tag">Web Application Firewall</span>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-row">
+      <div class="h-title">Server Error</div>
+      <div class="h-badge">Error 5xx Connection Failed</div>
+    </div>
+    <div class="h-time" id="errTime">—</div>
+  </div>
+</div>
+
+<div class="diag-band">
+  <div class="wrap">
+    <div class="diag">
+      <div class="node">
+        <div class="ni">
+          <svg class="icon" viewBox="0 0 64 64" fill="none"><rect x="6" y="10" width="52" height="44" rx="4" stroke="currentColor" stroke-width="2.5"/><line x1="6" y1="22" x2="58" y2="22" stroke="currentColor" stroke-width="2.5"/></svg>
+          <div class="sdot ok"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2.5"/></svg></div>
+        </div>
+        <div class="n-label">You</div>
+        <div class="n-name">Browser</div>
+        <div class="n-status ok">Connected</div>
+      </div>
+      <div class="conn"><div class="conn-track"><div class="conn-shine"></div></div></div>
+      <div class="node">
+        <div class="ni">
+          <svg class="icon" viewBox="0 0 64 64" fill="none"><path d="M32 5L9 15v18c0 14.5 11.5 24 23 27 11.5-3 23-12.5 23-27V15L32 5z" stroke="currentColor" stroke-width="2.5"/></svg>
+          <div class="sdot ok"><svg viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2.5"/></svg></div>
+        </div>
+        <div class="n-label">Proxy Edge</div>
+        <div class="n-name">HexShield</div>
+        <div class="n-status ok">Online</div>
+      </div>
+      <div class="conn"><div class="conn-track err"><div class="conn-shine"></div></div></div>
+      <div class="node">
+        <div class="ni">
+          <svg class="icon" viewBox="0 0 64 64" fill="none"><rect x="8" y="8" width="48" height="15" rx="3" stroke="currentColor" stroke-width="2.5"/><rect x="8" y="27" width="48" height="15" rx="3" stroke="currentColor" stroke-width="2.5"/></svg>
+          <div class="sdot err"><svg viewBox="0 0 12 12" fill="none"><line x1="3" y1="3" x2="9" y2="9" stroke="white" stroke-width="2.5"/><line x1="9" y1="3" x2="3" y2="9" stroke="white" stroke-width="2.5"/></svg></div>
+        </div>
+        <div class="n-label">Origin Host</div>
+        <div class="n-name">Server Target</div>
+        <div class="n-status err">Unreachable</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="content-grid">
+    <div class="content-block">
+      <h3>What happened?</h3>
+      <p>The HexShield security proxy network successfully received your data packet, but the backend origin application server dropped the transaction loop or returned an invalid gateway response protocol. The destination hardware is currently offline or under extreme configuration strain.</p>
+    </div>
+    <div class="content-block">
+      <h3>What can I do?</h3>
+      <p>This structural malfunction is unrelated to your client computer setup or network provider. Please terminate current socket attempts and allow the infrastructure automated recovery protocols to deploy. Contact administration if the timeout loop persists.</p>
+    </div>
+  </div>
+
+  <div class="cf-box-wrapper">::CLOUDFLARE_ERROR_500S_BOX::</div>
+
+  <div class="divider"></div>
+  <div class="footer-bar">
+    <span>HexShield Ray ID: <strong id="rayId">—</strong> &nbsp;&nbsp; Your IP: <span id="userIp">Click to reveal</span> &nbsp;&nbsp; Core network by <a href="#" style="color:#333;text-decoration:none">HexShield</a></span>
+    <span id="footerTime">—</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  var c='0123456789abcdef',r='';for(var i=0;i<16;i++)r+=c[Math.floor(Math.random()*16)];document.getElementById('rayId').textContent=r.toUpperCase();
+  function p(n){return n<10?'0'+n:n}var now=new Date();var ts=now.getUTCFullYear()+'-'+p(now.getUTCMonth()+1)+'-'+p(now.getUTCDate())+' '+p(now.getUTCHours())+':'+p(now.getUTCMinutes())+':'+p(now.getUTCSeconds())+' UTC';
+  document.getElementById('errTime').textContent=ts;document.getElementById('footerTime').textContent=ts;
+  var revealed=false;var $ip=document.getElementById('userIp');$ip.addEventListener('click',function(){if(revealed)return;revealed=true;$ip.textContent='Loading...';fetch('https://api.ipify.org?format=json').then(function(r){return r.json()}).then(function(d){$ip.textContent=d.ip;$ip.style.textDecoration='none';$ip.style.cursor='default'}).catch(function(){$ip.textContent='Unavailable'});});
+})();
+</script>
+</body>
+</html>
