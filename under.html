@@ -156,8 +156,8 @@
       letter-spacing: 1px;
     }
 
-    /* Altta Duran, Çizgiyle Sıfır Hizalanmış UAM Kapsül Alanı */
-    .attack-container {
+    /* Altta Duran, Çizgiyle Sıfır Hizalanmış Keskin Captcha Kapsül Alanı */
+    .captcha-container {
       width: 100%;
       margin-bottom: 48px;
       min-height: 65px;
@@ -166,7 +166,7 @@
       align-items: center;
     }
 
-    /* Cloudflare Turnstile / UAM Koyu Tema Zorunlu CSS Entegrasyonu */
+    /* Cloudflare Turnstile / Captcha Beyaz Kutu Engelleyici Zorunlu CSS Filtreleri */
     #challenge-stage, .cloudflare-wrapper, #cf-challenge, iframe, #cf-wrapper {
       color-scheme: dark !important;
       background: transparent !important;
@@ -255,8 +255,8 @@
       </div>
     </div>
 
-    <div class="attack-container">
-      ::IM_UNDER_ATTACK_BOX::
+    <div class="captcha-container">
+      ::CAPTCHA_BOX::
     </div>
 
     <div class="footer">
@@ -306,7 +306,7 @@
           progressText.textContent = Math.floor(progress) + '% COMPLETE';
           requestAnimationFrame(updateProgress);
         } else {
-          progressText.textContent = '100% ENVIRONMENT_VERIFIED // UNDER_ATTACK_MITIGATION';
+          progressText.textContent = '100% ENVIRONMENT_VERIFIED // AWAITING TOKEN';
         }
       }
 
